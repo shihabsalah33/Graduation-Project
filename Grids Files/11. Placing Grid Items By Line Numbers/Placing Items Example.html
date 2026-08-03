@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>CSS Grid: Placing Items by Line Numbers</title>
+
+  <style>
+    .container {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      grid-template-rows: repeat(2, 60px);
+      gap: 10px;
+      background: #fafafa;
+      padding: 20px;
+      width: max-content;
+    }
+
+    .item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #4f8eda;
+      color: #fff;
+      font-weight: bold;
+      font-size: 1.2rem;
+      border-radius: 5px;
+    }
+
+    .item1 {
+      grid-column: 2 / 4;
+      /* Start at line 1, end before line 3 (spans two columns) */
+      grid-row: 2 / 3;
+      /* Start at row line 2, end before line 3 (only second row) */
+      background: #f6973f;
+      /* Different color for highlighting */
+    }
+
+    .item5 {
+      grid-column: 2 / 3;
+      /* Start at line 2, end before line 3 (spans two columns) */
+      grid-row: 1 / 2;
+      /* Start at row line 1, end before line 3 (only First row) */
+      background: #c3f806;
+      /* Different color for highlighting */
+    }
+  </style>
+</head>
+
+<body>
+  <h2>Placing Grid Items by Line Numbers</h2>
+  <div class="container">
+    <div class="item item1">1</div>
+    <div class="item">2</div>
+    <div class="item">3</div>
+    <div class="item">4</div>
+    <div class="item item5">5</div>
+    <div class="item">6</div>
+  </div>
+</body>
+
+</html>

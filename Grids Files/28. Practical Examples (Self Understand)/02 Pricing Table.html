@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Grid Pricing Table</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: sans-serif; padding: 2rem; background: #f4f4f4; }
+    h1 { text-align: center; margin-bottom: 1rem; }
+
+    .pricing {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .plan {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .plan-header {
+      background: #3498db;
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+      font-weight: bold; 
+      
+    }
+    .plan-price {
+      font-size: 2rem;
+      margin: 1rem 0;
+      text-align: center;
+    }
+    .plan-features {
+      flex: 1;
+      list-style: none;
+      padding: 1rem;
+    }
+    .plan-features li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+    .plan-features li:last-child { border-bottom: none; }
+    .plan-cta {
+      background: #2980b9;
+      color: #fff;
+      text-align: center;
+      padding: 1rem;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    @media (max-width: 768px) {
+      .pricing { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Our Pricing Plans</h1>
+  <div class="pricing">
+    <div class="plan">
+      <div class="plan-header">Basic</div>
+      <div class="plan-price">$9<span>/mo</span></div>
+      <ul class="plan-features">
+        <li>1 User</li>
+        <li>10GB Storage</li>
+        <li>Email Support</li>
+      </ul>
+      <a href="#" class="plan-cta">Choose Basic</a>
+    </div>
+    <div class="plan">
+      <div class="plan-header">Pro</div>
+      <div class="plan-price">$29<span>/mo</span></div>
+      <ul class="plan-features">
+        <li>5 Users</li>
+        <li>100GB Storage</li>
+        <li>Priority Support</li>
+      </ul>
+      <a href="#" class="plan-cta">Choose Pro</a>
+    </div>
+    <div class="plan">
+      <div class="plan-header">Enterprise</div>
+      <div class="plan-price">$99<span>/mo</span></div>
+      <ul class="plan-features">
+        <li>Unlimited Users</li>
+        <li>1TB Storage</li>
+        <li>24/7 Support</li>
+      </ul>
+      <a href="#" class="plan-cta">Choose Enterprise</a>
+    </div>
+  </div>
+</body>
+</html>

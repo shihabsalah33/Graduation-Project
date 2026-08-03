@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Blog Layout</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: sans-serif; padding: 2rem; }
+    h1 { text-align: center; margin-bottom: 1rem; }
+
+    .blog-grid {
+      display: grid;
+      grid-template-areas:
+        "featured featured featured"
+        "post1    post2    post3"
+        "post4    post5    post6";
+      grid-gap: 1rem;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .featured {
+      grid-area: featured;
+      background: #4a90e2;
+      color: #fff;
+      padding: 1.5rem;
+    }
+    .post {
+      background: #f5f5f5;
+      padding: 1rem;
+      border: 1px solid #ddd;
+    }
+
+    /* Responsive: single column on narrow screens */
+    @media (max-width: 768px) {
+      .blog-grid {
+        grid-template-areas:
+          "featured"
+          "post1"
+          "post2"
+          "post3"
+          "post4"
+          "post5"
+          "post6";
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>My Blog</h1>
+  <div class="blog-grid">
+    <article class="featured">
+      <h2>Featured Article</h2>
+      <p>This is the standout post that spans all columns.</p>
+    </article>
+    <article id="post1" class="post"><h3>Post 1</h3><p>Summary of post one.</p></article>
+    <article id="post2" class="post"><h3>Post 2</h3><p>Summary of post two.</p></article>
+    <article id="post3" class="post"><h3>Post 3</h3><p>Summary of post three.</p></article>
+    <article id="post4" class="post"><h3>Post 4</h3><p>Summary of post four.</p></article>
+    <article id="post5" class="post"><h3>Post 5</h3><p>Summary of post five.</p></article>
+    <article id="post6" class="post"><h3>Post 6</h3><p>Summary of post six.</p></article>
+  </div>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SVG Sprite Demo</title>
+
+<!-- ──────────────── Code Overview ────────────────
+🎯 Purpose
+   Showcase an **inline SVG sprite** pattern: store multiple icons in a single
+   hidden `<svg>` block (`<symbol>` elements) and reference them later with
+   `<use href="#id">`.  This avoids extra HTTP requests, keeps markup clean,
+   and lets you style icons via CSS.
+
+🏗️ Layout
+   1. **Hidden sprite sheet** (display:none) at the top of the body.
+   2. **Toolbar** → flex row of four clickable icons.
+   3. CSS sets a base gray fill; hover turns icons red and enlarges them.
+
+🧰 Use Cases
+   • Toolbars / nav bars needing crisp, scalable icons.  
+   • Themes that require color changes on hover without extra image files.  
+   • Production builds can externalize the sprite to a separate file and inline
+     it at build time for even better caching.
+
+🔗 Key Properties
+   • `<symbol>` + `viewBox` → defines reusable vector shapes.  
+   • `<use>`                → embeds the referenced symbol.  
+   • `fill`, `stroke`       → inherit currentColor for easy theming.  
+   • `transition: fill .2s` → smooth color fade on hover.  
+   • `transform: scale(1.5)`→ enlarges icon on hover.
+──────────────────────────────────────────────────── -->
+<style>
+  /* 🌐 Base page styling */
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 2rem;
+    background: #f4f6f9;
+  }
+  h1  { margin-bottom: 1.2rem; }
+
+  /* 🛠️ Toolbar container */
+  .toolbar {
+    display: flex;
+    justify-content: center;   /* center icons horizontally                */
+    gap: 1.5rem;               /* equal spacing between icons              */
+  }
+
+  /* 🎯 Icon look & feel */
+  .icon {
+    width: 128px; height: 128px; /* fixed viewport box for each symbol       */
+    fill: #555;                /* default gray color                       */
+    cursor: pointer;
+    transition:                /* smooth hover animation                   */
+      fill .2s,                /* ↳ fade color in 0.2 s                    */
+      transform .2s;           /* ↳ grow in 0.2 s                          */
+  }
+  .icon:hover {
+    fill: #e74c3c;             /* turn red on hover                        */
+    transform: scale(1.5);     /* enlarge 150 %                            */
+  }
+</style>
+</head>
+<body>
+
+<!-- ① Inline Sprite Sheet (hidden from layout with display:none) -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <!-- 🏠 Home icon -->
+  <symbol id="home" viewBox="0 0 24 24">
+    <path d="M3 12l9-9 9 9v9h-6v-6H9v6H3z"/>
+  </symbol>
+
+  <!-- 🔍 Search icon -->
+  <symbol id="search" viewBox="0 0 24 24">
+    <circle cx="11" cy="11" r="7"
+            stroke="currentColor" stroke-width="4" fill="none"/>
+    <line  x1="16.5" y1="16.5" x2="21" y2="21"
+            stroke="currentColor" stroke-width="4"/>
+  </symbol>
+
+  <!-- 🔔 Bell / notification icon -->
+  <symbol id="bell" viewBox="0 0 24 24">
+    <path d="M12 3a6 6 0 0 0-6 6v4.5l-1.5 1.5v1h15v-1l-1.5-1.5V9a6 6 0 0 0-6-6z"/>
+    <circle cx="12" cy="20" r="2"/>
+  </symbol>
+
+  <!-- 👤 User / profile icon -->
+  <symbol id="user" viewBox="0 0 24 24">
+    <circle cx="12" cy="8" r="4"/>
+    <path d="M4 22c0-4 4-6 8-6s8 2 8 6"/>
+  </symbol>
+  
+</svg>
+
+<h1>SVG Sprite Toolbar</h1>
+
+<!-- ② Toolbar with four icons referencing the sprite -->
+<div class="toolbar">
+  <!-- Note: `aria-label` gives screen-reader context -->
+  <svg class="icon" aria-label="Home"><use href="#home"/></svg>
+  <svg class="icon" aria-label="Search"><use href="#search"/></svg>
+  <svg class="icon" aria-label="Notifications"><use href="#bell"/></svg>
+  <svg class="icon" aria-label="Profile"><use href="#user"/></svg>
+</div>
+
+</body>
+</html>

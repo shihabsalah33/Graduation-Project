@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>z-index Demo</title>
+  <style>
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body { font-family: sans-serif; padding: 2rem; }
+
+    .container {
+      position: relative;
+      width: 400px; height: 250px;
+      border: 2px solid #333;
+      margin: auto;
+      background: #f0f0f0;
+    }
+
+    .box {
+      position: absolute;
+      width: 150px; height: 150px;
+      opacity: 0.9;
+      color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: bold;
+      font-size: 1.1rem;
+      border-radius: 4px;
+    }
+
+    .box1 {
+      top: 20px; left: 20px;
+      background: #e74c3c;
+      z-index: 1; /* bottom */
+    }
+    .box2 {
+      top: 60px; left: 80px;
+      background: #3498db;
+      z-index: 3; /* top */
+    }
+    .box3 {
+      top: 100px; left: 140px;
+      background: #2ecc71;
+      z-index: 2; /* middle */
+    }
+
+    /* Create a new stacking context on .scoped */
+    .scoped {
+      position: relative;
+      z-index: 5;
+      width: 200px; height: 100px;
+      background: rgba(0,0,0,0.2);
+      top: 50px; left: 100px;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 style="text-align:center;">`z-index` Stacking Demo</h1>
+
+  <div class="container">
+    <div class="box box1">Box 1 (z-index 1)</div>
+    <div class="box box2">Box 2 (z-index 3)</div>
+    <div class="box box3">Box 3 (z-index 2)</div>
+    <div class="scoped">New Stack Context (z-index 5)</div>
+  </div>
+
+  <p style="text-align:center; margin-top:1rem;">
+    Resize the container or experiment by changing the z-index values.
+  </p>
+
+</body>
+</html>

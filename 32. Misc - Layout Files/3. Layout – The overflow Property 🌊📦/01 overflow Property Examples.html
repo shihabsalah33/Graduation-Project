@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CSS Overflow Example</title>
+  <style>
+    .container {
+      width: 200px;
+      height: 80px;
+      margin: 20px;
+      padding: 10px;
+      border: 2px solid #333;
+      font-family: sans-serif;
+      font-size: 16px;
+      background: #f9f9f9;
+    }
+    .visible   { overflow: visible; background: #eaf6fb; }
+    .hidden    { overflow: hidden; background: #fde9e9; } 
+    .scroll    { overflow: scroll; background: #e9fbe9; }
+    .auto      { overflow: auto; background: #faf6e9;}
+    .clip      { overflow: clip; background: #ece9fa;}
+    h2 {
+      font-size: 1.1em;
+      margin-top: 35px;
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>CSS <code>overflow</code> Property Examples</h1>
+
+  <h2>overflow: visible (default)</h2>
+  <div class="container visible">
+    This is some long content that will overflow outside the box. The overflow is <b>visible</b> so you can see it extending beyond the container!
+  </div>
+
+  <h2>overflow: hidden</h2>
+  <div class="container hidden">
+    This is some long content that will overflow outside the box. The overflow is <b>hidden</b> and you will only see what fits in the box.
+  </div>
+
+  <h2>overflow: scroll</h2>
+  <div class="container scroll">
+    This is some long content that will overflow outside the box. Overflow is <b>scroll</b>, so scrollbars are always visible, even if you don't need them.
+  </div>
+
+  <h2>overflow: auto</h2>
+  <div class="container auto">
+    This is some long content that will overflow outside the box. Overflow is <b>auto</b>: scrollbars appear only when needed.
+  </div>
+
+  <h2>overflow: clip</h2>
+  <div class="container clip">
+    This is some long content that will overflow outside the box. Overflow is <b>clip</b>: content is simply cut off, with no scrollbars and no visible overflow.
+  </div>
+
+</body>
+</html>

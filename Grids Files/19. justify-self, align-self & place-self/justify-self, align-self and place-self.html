@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>justify-self, align-self & place-self Demo</title>
+  <style>
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body { font-family: sans-serif; padding: 1rem; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows:    100px 100px;
+      gap: 10px;
+      border: 2px solid #666;
+    }
+    .grid > div {
+      background: #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #333;
+    }
+
+    /* 1) Center Item 1 both axes */
+    .item1 {
+      place-self: center center;
+      background: #4a90e2; color: white;
+    }
+
+    /* 2) Right-bottom for Item 2 */
+    .item2 {
+      justify-self: end;  /* horizontal */
+      align-self:   end;  /* vertical */
+      background: #e94c3d; color: white;
+    }
+
+    /* 3) Stretch vertically, left align for Item 3 */
+    .item3 {
+      justify-self: start;
+      align-self:   stretch;
+      background: #f1c40f; color: black;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Self-Alignment in CSS Grid</h1>
+  <div class="grid">
+    <div class="item1">1</div>
+    <div class="item2">2</div>
+    <div class="item3">3</div>
+    <div>4 (default)</div>
+    <div>5 (default)</div>
+    <div>6 (default)</div>
+  </div>
+
+  <br>
+  
+  <h2>Flexbox Note (cross-axis only)</h2>
+  <div style="display:flex; height:120px; border:2px solid #666; margin-top:1rem;">
+    <div style="flex:1; background:#4a90e2; align-self:center; color:white;">A (centered)</div>
+    <div style="flex:1; background:#e94c3d; align-self:flex-end; color:white;">B (bottom)</div>
+    <div style="flex:1; background:#f1c40f; color:black;">C (stretch/default)</div>
+  </div>
+
+</body>
+</html>

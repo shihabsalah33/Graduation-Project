@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Grid Alignment: justify-items & align-items</title>
+  <style>
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body { font-family: sans-serif; padding: 1rem; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: 100px 100px;
+      gap: 10px;
+      border: 2px solid #333;
+      margin-bottom: 2rem;
+    }
+    .grid div {
+      background: rgb(96, 95, 125);
+      color: white;
+      padding: 0.5rem;
+      border-radius: 4px;
+    }
+
+    /* Example 1: center horizontally, end vertically */
+    .example1 {
+      justify-items: center;  /* horizontal alignment in each cell */
+      align-items: end;       /* vertical alignment in each cell */
+    }
+
+    /* Example 2: start horizontally, start vertically */
+    .example2 {
+      justify-items: start;
+      align-items: start;
+    }
+
+    /* Example 3: end horizontally, center vertically */
+    .example3 {
+      justify-items: end;
+      align-items: center;
+    }
+
+    /* Example 4: stretch (default) */
+    .example4 {
+      justify-items: stretch;
+      align-items: stretch;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Grid Item Alignment Examples</h1>
+
+  <h2>1 justify-items: center; align-items: end</h2>
+  <div class="grid example1">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+  </div>
+
+  <h2>2 justify-items: start; align-items: start;</h2>
+  <div class="grid example2">
+    <div>1</div><div>2</div><div>3</div>
+    <div>4</div><div>5</div><div>6</div>
+  </div>
+
+  <h2>3 justify-items: end; align-items: center;</h2>
+  <div class="grid example3">
+    <div>1</div><div>2</div><div>3</div>
+    <div>4</div><div>5</div><div>6</div>
+  </div>
+
+  <h2>4 justify-items: stretch; align-items: stretch; (Default)</h2>
+  <div class="grid example4">
+    <div>1</div><div>2</div><div>3</div>
+    <div>4</div><div>5</div><div>6</div>
+  </div>
+
+</body>
+</html>

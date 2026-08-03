@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Grid Magazine Layout</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: sans-serif; line-height: 1.5; }
+    
+    .grid {
+      display: grid;
+      grid-template-areas:
+        "header header header"
+        "nav    content ads"
+        "footer footer footer";
+      grid-template-columns: 200px 1fr 150px;
+      grid-template-rows: auto 1fr auto;
+      gap: 1rem;
+      height: 100vh;
+      padding: 1rem;
+    }
+    header  { grid-area: header; background: #4a90e2; color: white; padding: 1rem; }
+    nav     { grid-area: nav;    background: #50e3c2; padding: 1rem; }
+    .content{ grid-area: content; background: #f5a623; padding: 1rem; overflow-y: auto; }
+    .ads    { grid-area: ads;    background: #bd10e0; padding: 1rem; }
+    footer  { grid-area: footer; background: #9013fe; color: white; padding: 1rem; text-align: center; }
+
+    /* Responsive: collapse to single column on narrow screens */
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-areas:
+          "header"
+          "nav"
+          "content"
+          "ads"
+          "footer";
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="grid">
+    <header>My Magazine Header</header>
+    <nav>
+      <ul>
+        <li><a href="#">Section 1</a></li>
+        <li><a href="#">Section 2</a></li>
+        <li><a href="#">Section 3</a></li>
+      </ul>
+    </nav>
+    <div class="content">
+      <h1>Article Title</h1>
+      <p>Long scrolling content… Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec viverra dolor.</p>
+    </div>
+    <aside class="ads">
+      <h2>Sponsored</h2>
+      <p>Ad content here.</p>
+    </aside>
+    <footer>© 2025 My Magazine</footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Implicit Columns with grid-auto-columns</title>
+  <style>
+    .grid2 {
+      display: grid;
+      /* Two explicit rows at 80px each */
+      grid-template-rows: 80px 80px;
+      /* Flow items into columns first, then new columns */
+      grid-auto-flow:column ;
+      /* Any new column beyond the first gets width 120px */
+      grid-auto-columns: 120px;
+     
+      gap: 10px;
+    }
+    .grid2 div {
+      background: #e94c3d;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <h2>Implicit Columns Demo</h2>
+  <div class="grid2">
+    <div>1</div> <!-- col1, row1 -->
+    <div>2</div> <!-- col1, row2 -->
+    <div>3</div> <!-- col2, row1 (implicit col) -->
+    <div>4</div> <!-- col2, row2 -->
+    <div>5</div> <!-- col3, row1 -->
+    <div>6</div> <!-- col3, row2 -->
+  </div>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Grid Form Layout</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: sans-serif; padding: 2rem; background: #fafafa; }
+    h1 { text-align: center; margin-bottom: 1rem; }
+    form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .full-width { grid-column: 1 / -1; }
+    label { display: block; margin-bottom: 0.25rem; font-weight: bold; }
+    input, select, textarea, button {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font: inherit;
+    }
+    button {
+      background: #2ecc71;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    @media (max-width: 600px) {
+      form { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Sign Up Form</h1>
+  <form>
+    <div>
+      <label for="first">First Name</label>
+      <input id="first" type="text" required>
+    </div>
+    <div>
+      <label for="last">Last Name</label>
+      <input id="last" type="text" required>
+    </div>
+    <div class="full-width">
+      <label for="email">Email Address</label>
+      <input id="email" type="email" required>
+    </div>
+    <div>
+      <label for="country">Country</label>
+      <select id="country">
+        <option>USA</option>
+        <option>Canada</option>
+        <option>UK</option>
+      </select>
+    </div>
+    <div>
+      <label for="subscribe">Subscribe?</label>
+      <select id="subscribe">
+        <option>Yes</option>
+        <option>No</option>
+      </select>
+    </div>
+    <div class="full-width">
+      <label for="comments">Comments</label>
+      <textarea id="comments" rows="4"></textarea>
+    </div>
+    <button class="full-width" type="submit">Submit</button>
+  </form>
+</body>
+</html>

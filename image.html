@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        body {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            max-width: 1000px;
+            margin: auto;
+
+        }
+
+        .main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            margin: 50px;
+
+
+        }
+
+        .m-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+
+
+        }
+
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 2rem;
+
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="main">
+        <img class="m-image" src="MyPicture 1.jpg" alt="">
+    </div>
+
+    <div class="grid">
+        <img src="MyPicture 1.jpg" alt="">
+        <img src="MyPicture 1.jpg" alt="">
+
+
+        <img src="MyPicture 1.jpg" alt="">
+
+
+        <img src="MyPicture 1.jpg" alt="">
+
+
+        <img src="MyPicture 1.jpg" alt="">
+    </div>
+    </div>
+
+</body>
+
+</html>

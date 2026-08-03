@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Photo Gallery</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: sans-serif; padding: 2rem; background: #fafafa; }
+    h1 { text-align: center; margin-bottom: 1rem; }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    .photo-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 4px;
+    }
+    .photo-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.3s;
+    }
+    .photo-item:hover img {
+      transform: scale(1.1);
+    }
+    .photo-item .caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      padding: 0.5rem;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Photo Gallery</h1>
+  <div class="gallery">
+    <div class="photo-item">
+      <img src="Images/A1.jpg" alt="Photo A">
+      <div class="caption">Caption A</div>
+    </div>
+    <div class="photo-item">
+      <img src="Images/A2.jpg" alt="Photo B">
+      <div class="caption">Caption B</div>
+    </div>
+    <div class="photo-item">
+      <img src="Images/A3.jpg" alt="Photo C">
+      <div class="caption">Caption C</div>
+    </div>
+    <div class="photo-item">
+      <img src="Images/A4.jpg" alt="Photo D">
+      <div class="caption">Caption D</div>
+    </div>
+    <div class="photo-item">
+      <img src="Images/A10.jpg" alt="Photo E">
+      <div class="caption">Caption E</div>
+    </div>
+    <div class="photo-item">
+      <img src="Images/A11.jpg" alt="Photo F">
+      <div class="caption">Caption F</div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!--
+  Code Overview: Practice Activities – Image Styling 🔨
+  ----------------------------------------------------
+  Purpose:
+    • Demonstrate four common image styling patterns:
+      1) Circular Profile Cards with hover shadow
+      2) 3×3 Gallery Grid with object-fit and border-radius
+      3) Filter Playground with animated CSS filters on hover
+      4) Responsive Full-Width Hero Banner
+
+  Layout:
+    • Four <section> blocks, each with a heading, description, and demo elements.
+    • Uses CSS Grid and Flexbox for layout.
+    • Placeholder images from via.placeholder.com.
+
+  Use Cases:
+    • Profile avatars, team pages
+    • Photo galleries
+    • Hover effects for mood & style
+    • Hero banners on landing pages
+
+  Key Properties:
+    • border-radius, box-shadow
+    • object-fit: cover
+    • filter, transition
+    • max-width, max-height, width: 100%
+    • display: grid; grid-template-columns
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Image Styling Practice Activities</title>
+  <style>
+    /* Reset & Base */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      color: #333;
+      line-height: 1.4;
+      padding: 2rem;
+      max-width: 1000px;
+      margin: auto;
+    }
+    h1 { text-align: center; margin-bottom: 2rem; }
+    section {
+      background: #fff;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    section h2 {
+      color: #2c3e50;
+      margin-bottom: 0.5rem;
+    }
+    section p {
+      margin-bottom: 1rem;
+      color: #555;
+    }
+
+    /* 1) Circular Profile Cards */
+    .profile-cards .container {
+    width: 150px;
+    height: 150px;
+    margin: auto;
+
+    /* Keep the circle shape */
+    border-radius: 50%;
+
+    /* Allow shadows to show */
+    overflow: visible;
+    transition: box-shadow 0.3s ease;
+    }
+
+    /* Inner image just fills the container */
+    .profile-cards .container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+    }
+
+    /* Hover on the container to show the shadow */
+    .profile-cards .container:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+
+    /* 2) 3×3 Gallery Grid */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+    .gallery-grid img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    /* 3) Filter Playground */
+    .filter-playground {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .filter-playground .item {
+      text-align: center;
+    }
+    .filter-playground .item img {
+      width: 150px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 4px;
+      transition: filter 0.3s ease;
+    }
+    .filter-playground .item:hover img {
+      /* combine sepia, blur, contrast */
+      filter: sepia(60%) blur(2px) contrast(150%);
+    }
+    .filter-playground .item .label {
+      margin-top: 0.5rem;
+      font-size: 0.85rem;
+      color: #555;
+    }
+
+    /* 4) Responsive Hero Banner */
+    .responsive-banner img {
+      width: 100%;
+      max-height: 60vh;
+      object-fit: cover;
+      border-radius: 4px;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Image Styling Practice Activities 🔨</h1>
+
+  <!-- 1) Circular Profile Cards -->
+  <section class="profile-cards">
+    <h2>1) Circular Profile Card</h2>
+    <p>Create a square container with an image inside. It becomes a perfect circle with a soft drop-shadow on hover.<br>
+    hover the image to see the shadow effect</p>
+    <div class="container">
+      <img src="Images/A1.jpg" alt="Profile">
+     
+    </div>
+  </section>
+
+  <!-- 2) 3×3 Gallery Grid -->
+  <section class="gallery-grid">
+    <h2>2) 3×3 Gallery Grid</h2>
+    <p>Build a 3×3 image grid. Each image covers its box and has rounded corners.</p>
+    <br>
+    <img src="Images/A1.jpg" alt="1">
+    <img src="Images/A2.jpg" alt="2">
+    <img src="Images/A3.jpg" alt="3">
+    <img src="Images/A4.jpg" alt="4">
+    <img src="Images/A1.jpg" alt="5">
+    <img src="Images/A2.jpg" alt="6">
+    <img src="Images/A3.jpg" alt="7">
+    <img src="Images/A4.jpg" alt="8">
+    <img src="Images/A1.jpg" alt="9">
+  </section>
+
+  <!-- 3) Filter Playground -->
+  <section class="filter-playground">
+    <h2>3) Filter Playground</h2><br>
+    <p>Experiment with CSS filters on hover. Try sepia, blur, contrast, or combinations.</p><br>
+    <div class="item">
+      <img src="Images/A1.jpg" alt="A">
+      <div class="label">Hover me</div>
+    </div>
+    <div class="item">
+      <img src="Images/A2.jpg" alt="B">
+      <div class="label">Hover me</div>
+    </div>
+    <div class="item">
+      <img src="Images/A3.jpg" alt="C">
+      <div class="label">Hover me</div>
+    </div>
+    <div class="item">
+      <img src="Images/A4.jpg" alt="D">
+      <div class="label">Hover me</div>
+    </div>
+  </section>
+
+  <!-- 4) Responsive Banner -->
+  <section class="responsive-banner">
+    <h2>4) Responsive Hero Banner</h2>
+    <p>Full-width banner that never exceeds 60vh in height, always covers its container.</p><br>
+    <img src="Images/A2.jpg" alt="Hero Banner">
+  </section>
+
+</body>
+</html>
