@@ -67,12 +67,14 @@ def sync_repository():
 
     # 5. Push to GitHub if online
     if online:
-        log("Internet connection available. Pushing to GitHub...")
+        log("Internet connection available. Syncing with GitHub...")
+        # Pull rebase once more before pushing to solve non-fast-forward silently
+        run_git_command(["pull", "--rebase", "origin", "main"])
         success, stdout, stderr = run_git_command(["push", "origin", "main"])
         if success:
             log("Synced and Pushed to GitHub successfully!")
         else:
-            log(f"Push deferred (will retry when connection stabilizes): {stderr}")
+            log(f"Push deferred (will retry next cycle): {stderr}")
     else:
         log("Working Offline. Changes are saved locally and queued for auto-push when online.")
 
