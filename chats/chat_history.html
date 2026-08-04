@@ -444,33 +444,69 @@
                 return `<div style="color: var(--label-color); text-align:center;">لا توجد تغييرات كود في هذه النقطة</div>`;
             }
 
-            let lines = rawDiff.split('\n');
-            let removed = [];
-            let added = [];
+            const fileBlocks = rawDiff.split(/^diff --git /m).filter(b => b.trim());
+            if (fileBlocks.length === 0) {
+                return `<div style="color: var(--label-color); text-align:center;">لا توجد ملفات كود معدلة في هذه النقطة</div>`;
+            }
 
-            lines.forEach(line => {
-                if (line.startsWith('-') && !line.startsWith('---')) {
-                    removed.push(line.substring(1));
-                } else if (line.startsWith('+') && !line.startsWith('+++')) {
-                    added.push(line.substring(1));
-                }
+            let htmlOutput = `<div style="display:flex; flex-direction:column; gap:12px; direction:ltr; text-align:left;">`;
+
+            fileBlocks.forEach((block, fIdx) => {
+                const headerLine = block.split('\n')[0] || '';
+                const fileNameMatch = headerLine.match(/b\/(.+)$/);
+                const fileName = fileNameMatch ? fileNameMatch[1] : 'ملف معدل';
+
+                let removedLines = [];
+                let addedLines = [];
+                let lineNoOld = 1;
+                let lineNoNew = 1;
+
+                block.split('\n').forEach(line => {
+                    if (line.startsWith('@@')) {
+                        const m = line.match(/@@ -(\d+).*\+(\d+)/);
+                        if (m) {
+                            lineNoOld = parseInt(m[1]);
+                            lineNoNew = parseInt(m[2]);
+                        }
+                    } else if (line.startsWith('-') && !line.startsWith('---')) {
+                        removedLines.push(`L${lineNoOld++}: ${line.substring(1)}`);
+                    } else if (line.startsWith('+') && !line.startsWith('+++')) {
+                        addedLines.push(`L${lineNoNew++}: ${line.substring(1)}`);
+                    }
+                });
+
+                const oldCode = removedLines.join('\n') || 'لا توجد سطور محذوفة في هذا الملف';
+                const newCode = addedLines.join('\n') || 'لا توجد سطور جديدة في هذا الملف';
+
+                htmlOutput += `
+                    <div style="background: #141419; border: 1px solid var(--border-color); border-radius: 10px; padding: 12px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="toggleFileDetails('file-${fIdx}')">
+                            <span style="color: #3b82f6; font-weight: 700; font-family: monospace;">📁 ${escapeHtml(fileName)}</span>
+                            <span style="color: var(--label-color); font-size: 0.8rem;">اضغط للتكبير/التصغير ↕</span>
+                        </div>
+                        <div id="file-${fIdx}" style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:10px;">
+                            <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.25); padding: 10px; border-radius: 6px;">
+                                <div style="color: #ef4444; font-weight: 700; font-size: 0.8rem; margin-bottom: 6px;">🔴 القديم (السابق):</div>
+                                <pre style="margin:0; color:#fca5a5; white-space:pre-wrap; font-family:monospace; font-size:0.8rem;">${escapeHtml(oldCode)}</pre>
+                            </div>
+                            <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.25); padding: 10px; border-radius: 6px;">
+                                <div style="color: #10b981; font-weight: 700; font-size: 0.8rem; margin-bottom: 6px;">🟢 الجديد (الحاضر):</div>
+                                <pre style="margin:0; color:#6ee7b7; white-space:pre-wrap; font-family:monospace; font-size:0.8rem;">${escapeHtml(newCode)}</pre>
+                            </div>
+                        </div>
+                    </div>
+                `;
             });
 
-            const oldText = removed.join('\n') || 'لا توجد سطور محذوفة';
-            const newText = added.join('\n') || 'لا توجد سطور جديدة';
+            htmlOutput += `</div>`;
+            return htmlOutput;
+        }
 
-            return `
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:14px; direction:ltr; text-align:left;">
-                    <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); padding: 12px; border-radius: 8px;">
-                        <div style="color: #ef4444; font-weight: 700; margin-bottom: 8px;">🔴 قبل التعديل (Old State):</div>
-                        <pre style="margin:0; color:#fca5a5; white-space:pre-wrap; font-family:monospace; font-size:0.85rem;">${escapeHtml(oldText)}</pre>
-                    </div>
-                    <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 12px; border-radius: 8px;">
-                        <div style="color: #10b981; font-weight: 700; margin-bottom: 8px;">🟢 بعد التعديل (New State):</div>
-                        <pre style="margin:0; color:#6ee7b7; white-space:pre-wrap; font-family:monospace; font-size:0.85rem;">${escapeHtml(newText)}</pre>
-                    </div>
-                </div>
-            `;
+        function toggleFileDetails(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.style.display = (el.style.display === 'none') ? 'grid' : 'none';
+            }
         }
 
         function filterChat(author) {
