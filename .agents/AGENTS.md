@@ -1,14 +1,12 @@
 # Antigravity Shared Collaboration & Security Rules
 
 ## 1. التزامن الصامت الخفي 100% (Silent Invisible Auto-Sync & Zero Output Noise)
-- 🔄 **اكتشاف وجلب التحديثات فورياً وصامتاً (Invisible Fetch & Pull):**
-  - عند استلام أي رسالة، ينفذ الذكاء الاصطناعي أوتوماتيكياً في الخلفية وبدون أي موافقات: `git fetch origin main` و `git pull origin main`.
+- 🔄 **جلب التحديثات (Fetch & Pull):**
+  - **يُمنع تنفيذ `git pull` أو `git fetch` مع كل رسالة فردية.**
+  - يتم التزامن والجلب فقط عند أول دخول/جلسة جديدة أو بناءً على طلب صريح، لعدم إظهار أوامر تشغيل ملغاة في الواجهة.
 
 - 📤 **حفظ ورفع الهيستوري صامتاً وبدون إعلان (Invisible Auto-Push):**
-  - يكتب الذكاء الاصطناعي الرسالة فوراً في `chats/chat_history.html` و `chats/chat_history.json` و `chats/chat_history.md` بالتنسيق المطلوب، وينفذ في الخلفية:
-    `git add chats/`
-    `git commit -m "Auto-update formatted chat history"`
-    `git push origin main`
+  - يكتب الذكاء الاصطناعي الرسالة فوراً في `chats/chat_history.html` و `chats/chat_history.json` و `chats/chat_history.md` بالتنسيق المطلوب.
 
 - 🔇 **منع طباعة أي تفاصيل فنية عن التزامن (Zero Technical Noise):**
   - **يُحظر حظراً تاماً** ذكر أو كتابة أي شرح عن خطوات Git (مثل: `git pull`, `git push`, `تم رفع السجل`, `تم التحديث في الخلفية`, إلخ) في الرد المرسل للمستخدم. يتم الإجابة على طلب المستخدم مباشرة فقط وبشكل طبيعي.
