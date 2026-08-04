@@ -61,14 +61,13 @@ def get_git_history():
         parts = line.split("|")
         if len(parts) >= 4:
             chash = parts[0]
-            # Fetch git diff patch for this commit
-            _, diff_text, _ = run_git_command(["show", "--stat", "--patch", chash])
+            success_diff, diff_text, _ = run_git_command(["show", "--stat", "--patch", chash])
             history.append({
                 "commit": chash,
                 "author": parts[1],
                 "date": parts[2],
                 "message": parts[3],
-                "diff": diff_text if diff_text else "لا توجد تغييرات نصية"
+                "diff": diff_text if (success_diff and diff_text) else "لا توجد تغييرات نصية للمراجعة"
             })
     return history
 
@@ -85,7 +84,9 @@ def export_git_timeline():
     except Exception as e:
         log(f"Export timeline error: {e}")
 
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from open_ide_diff import check_and_execute_ide_diff
+from chat_tracker_engine import sync_chat_tracker, verify_project_identity
 
 def sync_repository():
     # Verify project identity first before doing anything

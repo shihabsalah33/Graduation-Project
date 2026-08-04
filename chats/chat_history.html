@@ -392,6 +392,8 @@
             return escapeHtml(clean);
         }
 
+        let openDiffs = {};
+
         function renderCommits(commits) {
             const wrapper = document.getElementById('commits-list-wrapper');
             wrapper.innerHTML = '';
@@ -402,6 +404,9 @@
                 card.style.flexDirection = 'column';
                 card.style.alignItems = 'stretch';
                 card.setAttribute('data-author', item.author.toLowerCase());
+
+                const isExpanded = openDiffs[idx] ? 'block' : 'none';
+                const formattedDiff = parseDiffToSideBySide(item.diff);
 
                 card.innerHTML = `
                     <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -414,23 +419,58 @@
                             </div>
                         </div>
                         <div class="commit-actions">
-                            <button class="btn-checkout" style="background: rgba(59, 130, 246, 0.2); color: var(--ai-label-color);" onclick="toggleDiffView('diff-${idx}')">🔍 مشاهدة التغييرات والفرق في الصفحة</button>
+                            <button class="btn-checkout" style="background: rgba(59, 130, 246, 0.2); color: var(--ai-label-color);" onclick="toggleDiffView('${idx}')">🔍 مقارنة (قبل وبعد)</button>
                             <button class="btn-checkout" style="background: rgba(139, 92, 246, 0.15); color: var(--accent-purple);" onclick="previewCommit('${item.commit}')">⏪ معاينة النقطة</button>
                         </div>
                     </div>
-                    <div id="diff-${idx}" style="display:none; margin-top:14px; background:#0b0b0e; padding:14px; border-radius:10px; border:1px solid var(--border-color); font-family:monospace; font-size:0.85rem; white-space:pre-wrap; max-height:300px; overflow-y:auto; color:#10b981; direction:ltr; text-align:left;">
-${escapeHtml(item.diff || 'لا توجد تغييرات')}
+                    <div id="diff-${idx}" style="display:${isExpanded}; margin-top:14px; background:#0b0b0e; padding:16px; border-radius:12px; border:1px solid var(--border-color); font-size:0.9rem;">
+                        ${formattedDiff}
                     </div>
                 `;
                 wrapper.appendChild(card);
             });
         }
 
-        function toggleDiffView(id) {
-            const el = document.getElementById(id);
+        function toggleDiffView(idx) {
+            openDiffs[idx] = !openDiffs[idx];
+            const el = document.getElementById(`diff-${idx}`);
             if (el) {
-                el.style.display = (el.style.display === 'none') ? 'block' : 'none';
+                el.style.display = openDiffs[idx] ? 'block' : 'none';
             }
+        }
+
+        function parseDiffToSideBySide(rawDiff) {
+            if (!rawDiff || rawDiff.includes("لا توجد تغييرات")) {
+                return `<div style="color: var(--label-color); text-align:center;">لا توجد تغييرات كود في هذه النقطة</div>`;
+            }
+
+            let lines = rawDiff.split('\n');
+            let removed = [];
+            let added = [];
+
+            lines.forEach(line => {
+                if (line.startsWith('-') && !line.startsWith('---')) {
+                    removed.push(line.substring(1));
+                } else if (line.startsWith('+') && !line.startsWith('+++')) {
+                    added.push(line.substring(1));
+                }
+            });
+
+            const oldText = removed.join('\n') || 'لا توجد سطور محذوفة';
+            const newText = added.join('\n') || 'لا توجد سطور جديدة';
+
+            return `
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:14px; direction:ltr; text-align:left;">
+                    <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); padding: 12px; border-radius: 8px;">
+                        <div style="color: #ef4444; font-weight: 700; margin-bottom: 8px;">🔴 قبل التعديل (Old State):</div>
+                        <pre style="margin:0; color:#fca5a5; white-space:pre-wrap; font-family:monospace; font-size:0.85rem;">${escapeHtml(oldText)}</pre>
+                    </div>
+                    <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 12px; border-radius: 8px;">
+                        <div style="color: #10b981; font-weight: 700; margin-bottom: 8px;">🟢 بعد التعديل (New State):</div>
+                        <pre style="margin:0; color:#6ee7b7; white-space:pre-wrap; font-family:monospace; font-size:0.85rem;">${escapeHtml(newText)}</pre>
+                    </div>
+                </div>
+            `;
         }
 
         function filterChat(author) {
