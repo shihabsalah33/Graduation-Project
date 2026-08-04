@@ -88,11 +88,19 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from open_ide_diff import check_and_execute_ide_diff
 from chat_tracker_engine import sync_chat_tracker, verify_project_identity
 
+from manual_sync_controller import check_and_execute_manual_triggers
+
 def sync_repository():
     # Verify project identity first before doing anything
     if not verify_project_identity():
         log("Project identity verification failed. Skipping sync.")
         return
+
+    # Check and execute manual push/pull triggers from HTML buttons
+    try:
+        check_and_execute_manual_triggers()
+    except Exception:
+        pass
 
     # Check for HTML Diff requests and trigger native IDE diff window
     try:
@@ -148,17 +156,46 @@ def sync_repository():
     else:
         log("Working Offline. Changes are saved locally and queued for auto-push when online.")
 
+def sync_repository(on_exit=False):
+    if not verify_project_identity():
+        return
+
+    # Check for manual push/pull button triggers
+    try:
+        check_and_execute_manual_triggers()
+    except Exception:
+        pass
+
+    # Record latest chat messages locally
+    try:
+        sync_chat_tracker()
+    except Exception:
+        pass
+
+    export_git_timeline()
+
+    # Automatic Push ONLY occurs on session exit/closing if changes exist
+    if on_exit:
+        log("Session Exit / Close detected. Performing final automatic commit & push to GitHub...")
+        run_git_command(["add", "-A"])
+        commit_msg = f"Auto Sync On Exit [{datetime.now().strftime('%Y-%m-%d %H:%M')}]"
+        run_git_command(["commit", "-m", commit_msg])
+        if is_online():
+            run_git_command(["pull", "--rebase", "origin", "main"])
+            run_git_command(["push", "origin", "main"])
+            log("Final exit push completed successfully!")
+
 def main():
-    log("Graduation Project Auto-Sync Service Started.")
-    check_interval = 5  # Instant active sync every 5 seconds continuously
+    log("Graduation Project Control Service Started.")
+    import atexit
+    atexit.register(lambda: sync_repository(on_exit=True))
 
     while True:
         try:
-            sync_repository()
-        except Exception as e:
-            log(f"Unexpected service error: {str(e)}")
-        
-        time.sleep(check_interval)
+            sync_repository(on_exit=False)
+        except Exception:
+            pass
+        time.sleep(3)
 
 if __name__ == "__main__":
     main()
