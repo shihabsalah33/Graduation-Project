@@ -40,6 +40,23 @@ def find_app_data_brain_logs():
     logs = glob.glob(os.path.join(brain_path, "*", ".system_generated", "logs", "transcript.jsonl"))
     return logs
 
+import re
+
+def clean_user_message(raw_text):
+    if not raw_text:
+        return ""
+    # Extract only text inside <USER_REQUEST>...</USER_REQUEST> if present
+    match = re.search(r'<USER_REQUEST>\s*(.*?)\s*</USER_REQUEST>', raw_text, re.DOTALL)
+    if match:
+        return match.group(1).strip()
+    
+    # Remove system metadata tags if present
+    clean_text = re.sub(r'<ADDITIONAL_METADATA>.*?</ADDITIONAL_METADATA>', '', raw_text, flags=re.DOTALL)
+    clean_text = re.sub(r'<USER_SETTINGS_CHANGE>.*?</USER_SETTINGS_CHANGE>', '', clean_text, flags=re.DOTALL)
+    clean_text = re.sub(r'<USER_REQUEST>', '', clean_text)
+    clean_text = re.sub(r'</USER_REQUEST>', '', clean_text)
+    return clean_text.strip()
+
 def extract_project_messages():
     if not verify_project_identity():
         return []
@@ -65,15 +82,17 @@ def extract_project_messages():
                     content = entry.get("content", "")
 
                     if entry_type == "USER_INPUT" and content:
-                        if current_user_msg and current_ai_msg:
-                            messages.append({
-                                "id": len(messages) + 1,
-                                "sender": user_name,
-                                "userMessage": current_user_msg,
-                                "aiMessage": current_ai_msg
-                            })
-                            current_ai_msg = ""
-                        current_user_msg = content
+                        cleaned = clean_user_message(content)
+                        if cleaned:
+                            if current_user_msg and current_ai_msg:
+                                messages.append({
+                                    "id": len(messages) + 1,
+                                    "sender": user_name,
+                                    "userMessage": current_user_msg,
+                                    "aiMessage": current_ai_msg
+                                })
+                                current_ai_msg = ""
+                            current_user_msg = cleaned
                     
                     elif entry_type == "PLANNER_RESPONSE" and content:
                         current_ai_msg += content + "\n"
@@ -97,22 +116,15 @@ def sync_chat_tracker():
     if not new_messages:
         return
 
-    # Check existing messages in project chat_history.json
-    existing = []
-    if os.path.exists(CHAT_JSON):
-        try:
-            with open(CHAT_JSON, "r", encoding="utf-8") as f:
-                existing = json.load(f)
-        except Exception:
-            existing = []
+    # Clean existing user messages from XML tags if present
+    for msg in new_messages:
+        msg["userMessage"] = clean_user_message(msg.get("userMessage", ""))
 
-    # Update only if transcript extracted more items
-    if len(new_messages) > len(existing):
-        try:
-            with open(CHAT_JSON, "w", encoding="utf-8") as f:
-                json.dump(new_messages, f, ensure_ascii=False, indent=2)
-        except Exception:
-            pass
+    try:
+        with open(CHAT_JSON, "w", encoding="utf-8") as f:
+            json.dump(new_messages, f, ensure_ascii=False, indent=2)
+    except Exception:
+        pass
 
 if __name__ == "__main__":
     sync_chat_tracker()
