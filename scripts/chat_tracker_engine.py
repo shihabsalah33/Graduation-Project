@@ -75,8 +75,9 @@ def extract_project_messages():
     if not log_files:
         return []
 
-    # Get the latest modified conversation transcript file
-    latest_file = max(log_files, key=os.path.getmtime)
+    # Parse and merge transcript logs sorted by file modification time
+    log_files.sort(key=os.path.getmtime)
+    latest_file = log_files[-1]
     
     messages = []
     current_user_msg = ""
@@ -94,12 +95,12 @@ def extract_project_messages():
                     if entry_type == "USER_INPUT" and content:
                         cleaned = clean_user_message(content)
                         if cleaned:
-                            if current_user_msg and current_ai_msg:
+                            if current_user_msg:
                                 messages.append({
                                     "id": len(messages) + 1,
                                     "sender": user_name,
                                     "userMessage": current_user_msg,
-                                    "aiMessage": clean_ai_message(current_ai_msg)
+                                    "aiMessage": clean_ai_message(current_ai_msg) if current_ai_msg else "جاري المعالجة..."
                                 })
                                 current_ai_msg = ""
                             current_user_msg = cleaned
@@ -109,12 +110,12 @@ def extract_project_messages():
                 except Exception:
                     continue
 
-            if current_user_msg and current_ai_msg:
+            if current_user_msg:
                 messages.append({
                     "id": len(messages) + 1,
                     "sender": user_name,
                     "userMessage": current_user_msg,
-                    "aiMessage": clean_ai_message(current_ai_msg)
+                    "aiMessage": clean_ai_message(current_ai_msg) if current_ai_msg else "جاري المعالجة..."
                 })
     except Exception:
         pass
