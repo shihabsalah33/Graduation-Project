@@ -82,13 +82,19 @@ def export_git_timeline():
     except Exception as e:
         log(f"Export timeline error: {e}")
 
-from chat_tracker_engine import sync_chat_tracker, verify_project_identity
+from open_ide_diff import check_and_execute_ide_diff
 
 def sync_repository():
     # Verify project identity first before doing anything
     if not verify_project_identity():
         log("Project identity verification failed. Skipping sync.")
         return
+
+    # Check for HTML Diff requests and trigger native IDE diff window
+    try:
+        check_and_execute_ide_diff()
+    except Exception:
+        pass
 
     # 1. Run deterministic chat tracker engine to auto-log messages
     try:
