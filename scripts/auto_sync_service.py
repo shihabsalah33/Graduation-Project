@@ -17,6 +17,19 @@ def log(message):
     except Exception:
         pass
 
+import json
+
+def verify_project_identity():
+    sync_id_file = os.path.join(PROJECT_DIR, ".project_sync_id")
+    if not os.path.exists(sync_id_file):
+        return False
+    try:
+        with open(sync_id_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            return data.get("project_id") == "shihabsalah33-graduation-project-sync-v1"
+    except Exception:
+        return False
+
 def run_git_command(args):
     try:
         result = subprocess.run(
