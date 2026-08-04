@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سجل المحادثات المشتركة - مشروع التخرج</title>
+    <title>سجل المحادثات المباشر المتزامن - مشروع التخرج</title>
     <style>
         :root {
             --bg-color: #0b0b0e;
@@ -11,16 +11,17 @@
             --user-text: #ffffff;
             --ai-text: #e1e1e6;
             --label-color: #a0a0ab;
-            --ai-label-color: #d1d5db;
+            --ai-label-color: #3b82f6;
             --border-color: #27272a;
+            --badge-bg: #10b981;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background-color: var(--bg-color);
             color: var(--ai-text);
             margin: 0;
-            padding: 40px 20px;
+            padding: 30px 20px;
             display: flex;
             justify-content: center;
             direction: rtl;
@@ -35,23 +36,66 @@
         }
 
         .chat-header {
-            text-align: center;
-            padding-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
             border-bottom: 1px solid var(--border-color);
             margin-bottom: 10px;
         }
 
         .chat-header h1 {
             color: #ffffff;
-            font-size: 1.5rem;
-            margin: 0 0 8px 0;
+            font-size: 1.4rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .live-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            animation: pulse 1.8s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        #messages-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
         }
 
         .message-group {
             display: flex;
             flex-direction: column;
             gap: 12px;
-            margin-bottom: 16px;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .user-section {
@@ -77,8 +121,8 @@
             font-size: 1.05rem;
             line-height: 1.6;
             white-space: pre-wrap;
-            word-wrap: break-word;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            word-break: break-word;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
         }
 
         .ai-section {
@@ -93,6 +137,9 @@
             color: var(--ai-label-color);
             font-size: 0.95rem;
             font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .ai-content {
@@ -105,35 +152,104 @@
         .divider {
             height: 1px;
             background-color: var(--border-color);
-            margin: 12px 0;
+            margin: 8px 0;
         }
     </style>
 </head>
 <body>
     <div class="chat-container">
         <div class="chat-header">
-            <h1>💬 سجل المحادثات المشتركة</h1>
-        </div>
-
-        <!-- بداية السجل الجديد -->
-        <div class="message-group">
-            <div class="user-section">
-                <div class="user-label">👤 Shihab (مالك المشروع)</div>
-                <div class="user-bubble">الان اريدك ان تكتشف كل مستخدم لحاله و الان اريدك ان تقوم بحفظ الهيستوري كما هو في الصورة و لا اريد تاريخ و لا شيء اريد رسالتي او رسالة زميلي و فوقها توضيح من الذي كتبها و تكون الرسائل كما هي سواء مني او من زميلي او منك بنفس التفصيل اوكي ويكون الدردشة في ملف منسق بمجرد الضغط عليه يشوف الهيستوري كامل و ليس كملف مارك داون ليس منسق هل فهمت . ما اريد لنقم الان بحذف الهيستوري و عمل هذه الاوامر و البدء من جديد و ايضا عندما يقوم المستخدم بعمل استئناف او فتح دردشة جديدة فل تقول له ماهي اخر رسالة في الهيستوري اوكي</div>
-            </div>
-            <div class="ai-section">
-                <div class="ai-label">🤖 Antigravity</div>
-                <div class="ai-content">علم وحُفظ تماماً! تم حذف السجل القديم وتصفير الهيستوري بالكامل للبدء من جديد.
-
-تم اعتماد النظام الجديد فوراً:
-1. التمييز المستقل لكل مستخدم (Shihab أو اسم الزميل مثل Mostafa).
-2. تصميم المحادثة في ملف منسق تفاعلي بحواف منحنية وفقاقيع داكنة شبيهاً تماماً بالصورة المرفقة.
-3. إلغاء التواريخ والأوقات، والاعتماد على اسم صاحب الرسالة فوق الفقاعة مباشرة.
-4. إلغاء سرد "آخر رسالة" عند استئناف الجلسات أو فتح شات جديد.
-5. توفير ملف chat_history.html منسق ومجهز للعرض بضغطة واحدة، بجانب ملف chat_history.md.</div>
+            <h1>💬 سجل المحادثات المباشر</h1>
+            <div class="live-status">
+                <span class="pulse-dot"></span>
+                <span>متصل ومزامن تلقائياً</span>
             </div>
         </div>
 
+        <div id="messages-wrapper">
+            <!-- يتم تحميل المحادثات ديناميكياً وفي الوقت الفعلي -->
+        </div>
     </div>
+
+    <script>
+        let lastDataHash = "";
+
+        async function fetchChatHistory() {
+            try {
+                // منع التخزين المؤقت لضمان المزامنة الفورية
+                const response = await fetch('./chat_history.json?t=' + Date.now(), { cache: 'no-store' });
+                if (!response.ok) return;
+
+                const data = await response.json();
+                const dataString = JSON.stringify(data);
+
+                // تحديث الشاشة فقط إذا طرأ تغيير جديد
+                if (dataString !== lastDataHash) {
+                    lastDataHash = dataString;
+                    renderChatMessages(data);
+                }
+            } catch (err) {
+                console.error("خطأ أثناء جلب سجل المحادثة المباشر:", err);
+            }
+        }
+
+        function renderChatMessages(messages) {
+            const wrapper = document.getElementById('messages-wrapper');
+            wrapper.innerHTML = '';
+
+            messages.forEach((msg, idx) => {
+                const group = document.createElement('div');
+                group.className = 'message-group';
+
+                const userSec = document.createElement('div');
+                userSec.className = 'user-section';
+
+                const userLabel = document.createElement('div');
+                userLabel.className = 'user-label';
+                userLabel.textContent = '👤 ' + msg.sender;
+
+                const userBubble = document.createElement('div');
+                userBubble.className = 'user-bubble';
+                userBubble.textContent = msg.userMessage;
+
+                userSec.appendChild(userLabel);
+                userSec.appendChild(userBubble);
+
+                const aiSec = document.createElement('div');
+                aiSec.className = 'ai-section';
+
+                const aiLabel = document.createElement('div');
+                aiLabel.className = 'ai-label';
+                aiLabel.textContent = '🤖 Antigravity';
+
+                const aiContent = document.createElement('div');
+                aiContent.className = 'ai-content';
+                aiContent.textContent = msg.aiMessage;
+
+                aiSec.appendChild(aiLabel);
+                aiSec.appendChild(aiContent);
+
+                group.appendChild(userSec);
+                group.appendChild(aiSec);
+
+                if (idx < messages.length - 1) {
+                    const divider = document.createElement('div');
+                    divider.className = 'divider';
+                    group.appendChild(divider);
+                }
+
+                wrapper.appendChild(group);
+            });
+
+            // تمرير تلقائي لأسفل السجل عند وصول رسالة جديدة
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+
+        // تشغيل الجلب فور فتح الصفحة
+        fetchChatHistory();
+
+        // فحص وتحديث الهيستوري تلقائياً كل ثانيتين في الوقت الفعلي
+        setInterval(fetchChatHistory, 2000);
+    </script>
 </body>
 </html>
