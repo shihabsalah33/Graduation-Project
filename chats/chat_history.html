@@ -396,42 +396,41 @@
             const wrapper = document.getElementById('commits-list-wrapper');
             wrapper.innerHTML = '';
 
-            commits.forEach(item => {
+            commits.forEach((item, idx) => {
                 const card = document.createElement('div');
                 card.className = 'commit-card';
+                card.style.flexDirection = 'column';
+                card.style.alignItems = 'stretch';
                 card.setAttribute('data-author', item.author.toLowerCase());
 
                 card.innerHTML = `
-                    <div class="commit-info">
-                        <div class="commit-msg">${escapeHtml(item.message)}</div>
-                        <div class="commit-meta">
-                            <span>👤 ${escapeHtml(item.author)}</span>
-                            <span>🕒 ${escapeHtml(item.date)}</span>
-                            <span class="commit-hash">🔖 ${item.commit.substring(0, 7)}</span>
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div class="commit-info">
+                            <div class="commit-msg">${escapeHtml(item.message)}</div>
+                            <div class="commit-meta">
+                                <span>👤 ${escapeHtml(item.author)}</span>
+                                <span>🕒 ${escapeHtml(item.date)}</span>
+                                <span class="commit-hash">🔖 ${item.commit.substring(0, 7)}</span>
+                            </div>
+                        </div>
+                        <div class="commit-actions">
+                            <button class="btn-checkout" style="background: rgba(59, 130, 246, 0.2); color: var(--ai-label-color);" onclick="toggleDiffView('diff-${idx}')">🔍 مشاهدة التغييرات والفرق في الصفحة</button>
+                            <button class="btn-checkout" style="background: rgba(139, 92, 246, 0.15); color: var(--accent-purple);" onclick="previewCommit('${item.commit}')">⏪ معاينة النقطة</button>
                         </div>
                     </div>
-                    <div class="commit-actions">
-                        <button class="btn-checkout" onclick="openIdeDiff('${item.commit}')">🔍 مقارنة التغييرات الحقيقية في Antigravity</button>
-                        <button class="btn-checkout" style="background: rgba(139, 92, 246, 0.15); color: var(--accent-purple);" onclick="previewCommit('${item.commit}')">⏪ معاينة النقطة</button>
+                    <div id="diff-${idx}" style="display:none; margin-top:14px; background:#0b0b0e; padding:14px; border-radius:10px; border:1px solid var(--border-color); font-family:monospace; font-size:0.85rem; white-space:pre-wrap; max-height:300px; overflow-y:auto; color:#10b981; direction:ltr; text-align:left;">
+${escapeHtml(item.diff || 'لا توجد تغييرات')}
                     </div>
                 `;
                 wrapper.appendChild(card);
             });
         }
 
-        function openIdeDiff(hash) {
-            const reqData = {
-                commit_hash: hash,
-                time: Date.now()
-            };
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(reqData));
-            const dlAnchorElem = document.createElement('a');
-            dlAnchorElem.setAttribute("href", dataStr);
-            dlAnchorElem.setAttribute("download", ".diff_request.json");
-            document.body.appendChild(dlAnchorElem);
-            dlAnchorElem.click();
-            dlAnchorElem.remove();
-            alert('تم طلب فتح المقارنة للنقطة (' + hash.substring(0, 7) + ')! قم بنقل/حفظ الملف .diff_request.json داخل مجلد chats لتقوم الخدمة بفتح نافذة Diff فوراً في Antigravity.');
+        function toggleDiffView(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.style.display = (el.style.display === 'none') ? 'block' : 'none';
+            }
         }
 
         function filterChat(author) {

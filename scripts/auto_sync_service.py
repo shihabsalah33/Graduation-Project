@@ -51,7 +51,6 @@ def get_git_branches():
     return list(set(branches))
 
 def get_git_history():
-    # Format: hash|author|date|message
     fmt = "%H|%an|%ar|%s"
     success, stdout, _ = run_git_command(["log", "-n", "30", f"--pretty=format:{fmt}"])
     if not success:
@@ -61,11 +60,15 @@ def get_git_history():
     for line in stdout.splitlines():
         parts = line.split("|")
         if len(parts) >= 4:
+            chash = parts[0]
+            # Fetch git diff patch for this commit
+            _, diff_text, _ = run_git_command(["show", "--stat", "--patch", chash])
             history.append({
-                "commit": parts[0],
+                "commit": chash,
                 "author": parts[1],
                 "date": parts[2],
-                "message": parts[3]
+                "message": parts[3],
+                "diff": diff_text if diff_text else "لا توجد تغييرات نصية"
             })
     return history
 
