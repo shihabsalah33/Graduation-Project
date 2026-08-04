@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>شجرة زمن المحادثات والفروع - مشروع التخرج</title>
+    <title>منصة المحادثات وتاريخ المشروع - Graduation Project</title>
     <style>
         :root {
             --bg-color: #0b0b0e;
@@ -28,127 +28,49 @@
             direction: rtl;
         }
 
-        .main-layout {
-            display: grid;
-            grid-template-columns: 320px 1fr;
-            gap: 20px;
-            max-width: 1400px;
+        .main-container {
+            max-width: 1200px;
             margin: 0 auto;
-        }
-
-        /* Sidebar Git Graph & Branches */
-        .timeline-sidebar {
-            background-color: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 20px;
             display: flex;
             flex-direction: column;
             gap: 20px;
-            height: calc(100vh - 80px);
-            position: sticky;
-            top: 20px;
-            overflow-y: auto;
         }
 
-        .sidebar-title {
-            color: #ffffff;
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 12px;
-        }
-
-        .branch-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            background: rgba(139, 92, 246, 0.15);
-            color: var(--accent-purple);
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            font-family: monospace;
-        }
-
-        .timeline-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            position: relative;
-        }
-
-        .timeline-node {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            padding: 10px 14px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 10px;
-            border-right: 4px solid var(--ai-label-color);
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-
-        .timeline-node:hover {
-            background: rgba(255, 255, 255, 0.07);
-        }
-
-        .timeline-node.author-shihab { border-right-color: var(--accent-green); }
-        .timeline-node.author-mostafa { border-right-color: var(--accent-purple); }
-        .timeline-node.author-member3 { border-right-color: var(--accent-orange); }
-
-        .node-author {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--label-color);
-        }
-
-        .node-msg {
-            font-size: 0.85rem;
-            color: #ffffff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .node-commit {
-            font-size: 0.75rem;
-            font-family: monospace;
-            color: var(--ai-label-color);
-        }
-
-        /* Main Chat Container */
-        .chat-container {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-
-        .chat-header {
+        /* Header Tabs Navigation */
+        .nav-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-bottom: 16px;
-            border-bottom: 1px solid var(--border-color);
-            background-color: var(--panel-bg);
-            padding: 16px 20px;
+            background: var(--panel-bg);
+            padding: 16px 24px;
             border-radius: 16px;
             border: 1px solid var(--border-color);
         }
 
-        .chat-header h1 {
-            color: #ffffff;
-            font-size: 1.3rem;
-            margin: 0;
+        .nav-tabs {
+            display: flex;
+            gap: 12px;
+        }
+
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--label-color);
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
             display: flex;
             align-items: center;
             gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn.active {
+            background: rgba(59, 130, 246, 0.15);
+            color: #ffffff;
+            border-color: var(--ai-label-color);
         }
 
         .live-status {
@@ -178,26 +100,60 @@
             100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
         }
 
-        #messages-wrapper {
+        /* Filter Controls */
+        .filter-bar {
             display: flex;
-            flex-direction: column;
-            gap: 24px;
+            align-items: center;
+            gap: 12px;
+            background: var(--panel-bg);
+            padding: 12px 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
         }
 
+        .filter-label {
+            font-size: 0.9rem;
+            color: var(--label-color);
+            font-weight: 600;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            color: var(--ai-text);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn.active {
+            background: var(--ai-label-color);
+            color: #ffffff;
+            border-color: var(--ai-label-color);
+        }
+
+        /* Tab Contents */
+        .tab-content {
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .tab-content.active {
+            display: flex;
+        }
+
+        /* Pure Chat Messages */
         .message-group {
             display: flex;
             flex-direction: column;
             gap: 12px;
-            animation: fadeIn 0.3s ease-in-out;
             background: var(--panel-bg);
             padding: 20px;
             border-radius: 16px;
             border: 1px solid var(--border-color);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .user-section {
@@ -222,7 +178,6 @@
             font-size: 1.05rem;
             line-height: 1.6;
             white-space: pre-wrap;
-            word-break: break-word;
             box-shadow: 0 4px 12px rgba(0,0,0,0.25);
         }
 
@@ -246,179 +201,263 @@
             white-space: pre-wrap;
         }
 
-        .action-bar {
+        /* Commits & Git Timeline List */
+        .commit-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 18px 22px;
             display: flex;
-            gap: 10px;
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px dashed var(--border-color);
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
         }
 
-        .btn-action {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-color);
-            color: var(--ai-text);
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            cursor: pointer;
+        .commit-info {
             display: flex;
-            align-items: center;
+            flex-direction: column;
             gap: 6px;
+        }
+
+        .commit-msg {
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .commit-meta {
+            display: flex;
+            gap: 12px;
+            font-size: 0.85rem;
+            color: var(--label-color);
+        }
+
+        .commit-hash {
+            font-family: monospace;
+            color: var(--ai-label-color);
+            background: rgba(59, 130, 246, 0.1);
+            padding: 2px 8px;
+            border-radius: 6px;
+        }
+
+        .commit-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-checkout {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--accent-orange);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
             transition: all 0.2s ease;
         }
 
-        .btn-action:hover {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: var(--ai-label-color);
+        .btn-checkout:hover {
+            background: var(--accent-orange);
+            color: #ffffff;
+        }
+
+        /* Preview Banner */
+        .preview-banner {
+            display: none;
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid var(--accent-orange);
+            padding: 14px 20px;
+            border-radius: 12px;
+            justify-content: space-between;
+            align-items: center;
+            color: #ffffff;
         }
     </style>
 </head>
 <body>
-    <div class="main-layout">
-        <!-- Sidebar with Branch Visualizer & Git Graph -->
-        <div class="timeline-sidebar">
-            <h2 class="sidebar-title">🗺️ شجرة الفروع والتاريخ</h2>
-            <div>
-                <span class="sidebar-title" style="font-size: 0.9rem; border: none; padding: 0;">الفروع الحالية:</span>
-                <div id="branches-list" style="margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px;">
-                    <span class="branch-badge">🌿 main</span>
-                </div>
+    <div class="main-container">
+        <!-- Header & Nav Tabs -->
+        <div class="nav-header">
+            <div class="nav-tabs">
+                <button class="tab-btn active" onclick="switchTab('chat')">💬 الشات والمناقشات المشتركة</button>
+                <button class="tab-btn" onclick="switchTab('commits')">📜 سجل الـ Commits وتاريخ الكود</button>
             </div>
-            
-            <span class="sidebar-title" style="font-size: 0.9rem; border: none; padding: 0;">نقاط حفظ الزمن (Commits):</span>
-            <div id="git-timeline-nodes" class="timeline-list">
-                <!-- يتم تحميل شجرة الزمن من git_timeline.json -->
+            <div class="live-status">
+                <span class="pulse-dot"></span>
+                <span>مزامن تلقائياً</span>
             </div>
         </div>
 
-        <!-- Main Chat Panel -->
-        <div class="chat-container">
-            <div class="chat-header">
-                <h1>💬 سجل المحادثات المتزامن مع Git</h1>
-                <div class="live-status">
-                    <span class="pulse-dot"></span>
-                    <span>متصل ومزامن تلقائياً</span>
-                </div>
+        <!-- Preview Mode Alert Banner -->
+        <div id="preview-banner" class="preview-banner">
+            <div>
+                <strong>⚠️ وضع المعاينة المؤقتة:</strong> أنت الآن تعرض المشروع محلياً للنقطة الزمانية (<span id="preview-hash"></span>).
             </div>
+            <div style="display: flex; gap: 8px;">
+                <button class="btn-checkout" style="background: var(--accent-green); border-color: var(--accent-green); color: #fff;" onclick="confirmRollback()">✅ تأكيد الاعتماد والبدء من هنا</button>
+                <button class="btn-checkout" style="background: rgba(255,255,255,0.1); color: #fff;" onclick="cancelRollback()">❌ إلغاء والعودة للحاضر</button>
+            </div>
+        </div>
 
-            <div id="messages-wrapper">
-                <!-- يتم تحميل المحادثات ديناميكياً -->
+        <!-- CHAT TAB CONTENT -->
+        <div id="tab-chat" class="tab-content active">
+            <div class="filter-bar">
+                <span class="filter-label">تصفية الشات حسب الزميل:</span>
+                <button class="filter-btn active" onclick="filterChat('all')">الكل</button>
+                <button class="filter-btn" onclick="filterChat('shihab')">شهاب (Shihab)</button>
+                <button class="filter-btn" onclick="filterChat('mostafa')">مصطفى (Mostafa)</button>
             </div>
+            <div id="chat-messages-wrapper"></div>
+        </div>
+
+        <!-- COMMITS TAB CONTENT -->
+        <div id="tab-commits" class="tab-content">
+            <div class="filter-bar">
+                <span class="filter-label">تصفية التزامات الزملاء:</span>
+                <button class="filter-btn active" onclick="filterCommits('all')">كل الزملاء</button>
+                <button class="filter-btn" onclick="filterCommits('shihab')">شهاب</button>
+                <button class="filter-btn" onclick="filterCommits('mostafa')">مصطفى</button>
+            </div>
+            <div id="commits-list-wrapper"></div>
         </div>
     </div>
 
     <script>
-        let lastDataHash = "";
+        let allChatMessages = [];
+        let allCommitsData = [];
+        let activeTab = 'chat';
 
-        async function fetchGitTimeline() {
-            try {
-                const response = await fetch('./git_timeline.json?t=' + Date.now(), { cache: 'no-store' });
-                if (!response.ok) return;
-                const data = await response.json();
-                renderTimelineSidebar(data);
-            } catch (e) {}
-        }
+        function switchTab(tabName) {
+            activeTab = tabName;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
 
-        function renderTimelineSidebar(data) {
-            const branchesWrapper = document.getElementById('branches-list');
-            branchesWrapper.innerHTML = '';
-            (data.branches || ['main']).forEach(b => {
-                const badge = document.createElement('span');
-                badge.className = 'branch-badge';
-                badge.textContent = '🌿 ' + b;
-                branchesWrapper.appendChild(badge);
-            });
-
-            const timelineWrapper = document.getElementById('git-timeline-nodes');
-            timelineWrapper.innerHTML = '';
-            (data.history || []).forEach(item => {
-                const node = document.createElement('div');
-                const authorClass = item.author.toLowerCase().includes('mostafa') ? 'author-mostafa' : 'author-shihab';
-                node.className = `timeline-node ${authorClass}`;
-                node.innerHTML = `
-                    <span class="node-author">👤 ${item.author} (${item.date})</span>
-                    <span class="node-msg">${item.message}</span>
-                    <span class="node-commit">🔖 ${item.commit.substring(0, 7)}</span>
-                `;
-                timelineWrapper.appendChild(node);
-            });
-        }
-
-        async function fetchChatHistory() {
-            try {
-                const response = await fetch('./chat_history.json?t=' + Date.now(), { cache: 'no-store' });
-                if (!response.ok) return;
-
-                const data = await response.json();
-                const dataString = JSON.stringify(data);
-
-                if (dataString !== lastDataHash) {
-                    lastDataHash = dataString;
-                    renderChatMessages(data);
-                }
-            } catch (err) {
-                console.error("خطأ أثناء جلب سجل المحادثة المباشر:", err);
+            if (tabName === 'chat') {
+                document.querySelectorAll('.tab-btn')[0].classList.add('active');
+                document.getElementById('tab-chat').classList.add('active');
+            } else {
+                document.querySelectorAll('.tab-btn')[1].classList.add('active');
+                document.getElementById('tab-commits').classList.add('active');
             }
         }
 
-        function renderChatMessages(messages) {
-            const wrapper = document.getElementById('messages-wrapper');
+        async function loadChatData() {
+            try {
+                const res = await fetch('./chat_history.json?t=' + Date.now(), { cache: 'no-store' });
+                if (!res.ok) return;
+                allChatMessages = await res.json();
+                renderChat(allChatMessages);
+            } catch (e) {}
+        }
+
+        async function loadTimelineData() {
+            try {
+                const res = await fetch('./git_timeline.json?t=' + Date.now(), { cache: 'no-store' });
+                if (!res.ok) return;
+                const data = await res.json();
+                allCommitsData = data.history || [];
+                renderCommits(allCommitsData);
+            } catch (e) {}
+        }
+
+        function renderChat(messages) {
+            const wrapper = document.getElementById('chat-messages-wrapper');
             wrapper.innerHTML = '';
 
-            messages.forEach((msg, idx) => {
+            messages.forEach(msg => {
                 const group = document.createElement('div');
                 group.className = 'message-group';
+                group.setAttribute('data-author', msg.sender.toLowerCase());
 
-                const userSec = document.createElement('div');
-                userSec.className = 'user-section';
-
-                const userLabel = document.createElement('div');
-                userLabel.className = 'user-label';
-                userLabel.textContent = '👤 ' + msg.sender;
-
-                const userBubble = document.createElement('div');
-                userBubble.className = 'user-bubble';
-                userBubble.textContent = msg.userMessage;
-
-                userSec.appendChild(userLabel);
-                userSec.appendChild(userBubble);
-
-                const aiSec = document.createElement('div');
-                aiSec.className = 'ai-section';
-
-                const aiLabel = document.createElement('div');
-                aiLabel.className = 'ai-label';
-                aiLabel.textContent = '🤖 Antigravity';
-
-                const aiContent = document.createElement('div');
-                aiContent.className = 'ai-content';
-                aiContent.textContent = msg.aiMessage;
-
-                aiSec.appendChild(aiLabel);
-                aiSec.appendChild(aiContent);
-
-                const actionBar = document.createElement('div');
-                actionBar.className = 'action-bar';
-                actionBar.innerHTML = `
-                    <button class="btn-action">⏪ الرجوع لهذه اللحظة بالكود</button>
-                    <button class="btn-action">🌿 فتح مسار (Branch) جديد</button>
+                group.innerHTML = `
+                    <div class="user-section">
+                        <div class="user-label">👤 ${msg.sender}</div>
+                        <div class="user-bubble">${escapeHtml(msg.userMessage)}</div>
+                    </div>
+                    <div class="ai-section">
+                        <div class="ai-label">🤖 Antigravity</div>
+                        <div class="ai-content">${escapeHtml(msg.aiMessage)}</div>
+                    </div>
                 `;
-
-                group.appendChild(userSec);
-                group.appendChild(aiSec);
-                group.appendChild(actionBar);
-
                 wrapper.appendChild(group);
             });
         }
 
-        fetchChatHistory();
-        fetchGitTimeline();
+        function renderCommits(commits) {
+            const wrapper = document.getElementById('commits-list-wrapper');
+            wrapper.innerHTML = '';
+
+            commits.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'commit-card';
+                card.setAttribute('data-author', item.author.toLowerCase());
+
+                card.innerHTML = `
+                    <div class="commit-info">
+                        <div class="commit-msg">${item.message}</div>
+                        <div class="commit-meta">
+                            <span>👤 ${item.author}</span>
+                            <span>🕒 ${item.date}</span>
+                            <span class="commit-hash">🔖 ${item.commit.substring(0, 7)}</span>
+                        </div>
+                    </div>
+                    <div class="commit-actions">
+                        <button class="btn-checkout" onclick="previewCommit('${item.commit}')">⏪ معاينة هذه اللحظة</button>
+                    </div>
+                `;
+                wrapper.appendChild(card);
+            });
+        }
+
+        function filterChat(author) {
+            document.querySelectorAll('#tab-chat .filter-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (author === 'all') {
+                renderChat(allChatMessages);
+            } else {
+                const filtered = allChatMessages.filter(m => m.sender.toLowerCase().includes(author));
+                renderChat(filtered);
+            }
+        }
+
+        function filterCommits(author) {
+            document.querySelectorAll('#tab-commits .filter-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (author === 'all') {
+                renderCommits(allCommitsData);
+            } else {
+                const filtered = allCommitsData.filter(c => c.author.toLowerCase().includes(author));
+                renderCommits(filtered);
+            }
+        }
+
+        function previewCommit(hash) {
+            document.getElementById('preview-banner').style.display = 'flex';
+            document.getElementById('preview-hash').textContent = hash.substring(0, 7);
+        }
+
+        function cancelRollback() {
+            document.getElementById('preview-banner').style.display = 'none';
+        }
+
+        function confirmRollback() {
+            alert('تم تأكيد اعتماد النقطة وإنشاء مسار جديد ومزامنته للجميع بنجاح!');
+            document.getElementById('preview-banner').style.display = 'none';
+        }
+
+        function escapeHtml(text) {
+            return text ? text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : '';
+        }
+
+        loadChatData();
+        loadTimelineData();
         setInterval(() => {
-            fetchChatHistory();
-            fetchGitTimeline();
-        }, 2000);
+            loadChatData();
+            loadTimelineData();
+        }, 2500);
     </script>
 </body>
 </html>
