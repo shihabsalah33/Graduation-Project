@@ -3,17 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سجل المحادثات المباشر المتزامن - مشروع التخرج</title>
+    <title>شجرة زمن المحادثات والفروع - مشروع التخرج</title>
     <style>
         :root {
             --bg-color: #0b0b0e;
+            --panel-bg: #141519;
             --user-bubble-bg: #2a2b2e;
             --user-text: #ffffff;
             --ai-text: #e1e1e6;
             --label-color: #a0a0ab;
             --ai-label-color: #3b82f6;
             --border-color: #27272a;
-            --badge-bg: #10b981;
+            --accent-green: #10b981;
+            --accent-purple: #8b5cf6;
+            --accent-orange: #f59e0b;
         }
 
         body {
@@ -21,15 +24,107 @@
             background-color: var(--bg-color);
             color: var(--ai-text);
             margin: 0;
-            padding: 30px 20px;
-            display: flex;
-            justify-content: center;
+            padding: 20px;
             direction: rtl;
         }
 
+        .main-layout {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Sidebar Git Graph & Branches */
+        .timeline-sidebar {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            height: calc(100vh - 80px);
+            position: sticky;
+            top: 20px;
+            overflow-y: auto;
+        }
+
+        .sidebar-title {
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+
+        .branch-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            background: rgba(139, 92, 246, 0.15);
+            color: var(--accent-purple);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            font-family: monospace;
+        }
+
+        .timeline-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: relative;
+        }
+
+        .timeline-node {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            border-right: 4px solid var(--ai-label-color);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .timeline-node:hover {
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .timeline-node.author-shihab { border-right-color: var(--accent-green); }
+        .timeline-node.author-mostafa { border-right-color: var(--accent-purple); }
+        .timeline-node.author-member3 { border-right-color: var(--accent-orange); }
+
+        .node-author {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--label-color);
+        }
+
+        .node-msg {
+            font-size: 0.85rem;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .node-commit {
+            font-size: 0.75rem;
+            font-family: monospace;
+            color: var(--ai-label-color);
+        }
+
+        /* Main Chat Container */
         .chat-container {
-            width: 100%;
-            max-width: 850px;
             display: flex;
             flex-direction: column;
             gap: 24px;
@@ -41,12 +136,15 @@
             align-items: center;
             padding-bottom: 16px;
             border-bottom: 1px solid var(--border-color);
-            margin-bottom: 10px;
+            background-color: var(--panel-bg);
+            padding: 16px 20px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
         }
 
         .chat-header h1 {
             color: #ffffff;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             margin: 0;
             display: flex;
             align-items: center;
@@ -58,7 +156,7 @@
             align-items: center;
             gap: 6px;
             background: rgba(16, 185, 129, 0.1);
-            color: #10b981;
+            color: var(--accent-green);
             padding: 6px 14px;
             border-radius: 20px;
             font-size: 0.85rem;
@@ -69,7 +167,7 @@
         .pulse-dot {
             width: 8px;
             height: 8px;
-            background-color: #10b981;
+            background-color: var(--accent-green);
             border-radius: 50%;
             animation: pulse 1.8s infinite;
         }
@@ -91,6 +189,10 @@
             flex-direction: column;
             gap: 12px;
             animation: fadeIn 0.3s ease-in-out;
+            background: var(--panel-bg);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
         }
 
         @keyframes fadeIn {
@@ -109,7 +211,6 @@
             color: var(--label-color);
             font-size: 0.9rem;
             font-weight: 600;
-            padding-right: 4px;
         }
 
         .user-bubble {
@@ -117,7 +218,7 @@
             color: var(--user-text);
             padding: 16px 22px;
             border-radius: 18px;
-            max-width: 90%;
+            max-width: 95%;
             font-size: 1.05rem;
             line-height: 1.6;
             white-space: pre-wrap;
@@ -130,16 +231,12 @@
             flex-direction: column;
             gap: 6px;
             margin-top: 4px;
-            padding-right: 4px;
         }
 
         .ai-label {
             color: var(--ai-label-color);
             font-size: 0.95rem;
             font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 4px;
         }
 
         .ai-content {
@@ -149,41 +246,113 @@
             white-space: pre-wrap;
         }
 
-        .divider {
-            height: 1px;
-            background-color: var(--border-color);
-            margin: 8px 0;
+        .action-bar {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed var(--border-color);
+        }
+
+        .btn-action {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--ai-text);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-action:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: var(--ai-label-color);
         }
     </style>
 </head>
 <body>
-    <div class="chat-container">
-        <div class="chat-header">
-            <h1>💬 سجل المحادثات المباشر</h1>
-            <div class="live-status">
-                <span class="pulse-dot"></span>
-                <span>متصل ومزامن تلقائياً</span>
+    <div class="main-layout">
+        <!-- Sidebar with Branch Visualizer & Git Graph -->
+        <div class="timeline-sidebar">
+            <h2 class="sidebar-title">🗺️ شجرة الفروع والتاريخ</h2>
+            <div>
+                <span class="sidebar-title" style="font-size: 0.9rem; border: none; padding: 0;">الفروع الحالية:</span>
+                <div id="branches-list" style="margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px;">
+                    <span class="branch-badge">🌿 main</span>
+                </div>
+            </div>
+            
+            <span class="sidebar-title" style="font-size: 0.9rem; border: none; padding: 0;">نقاط حفظ الزمن (Commits):</span>
+            <div id="git-timeline-nodes" class="timeline-list">
+                <!-- يتم تحميل شجرة الزمن من git_timeline.json -->
             </div>
         </div>
 
-        <div id="messages-wrapper">
-            <!-- يتم تحميل المحادثات ديناميكياً وفي الوقت الفعلي -->
+        <!-- Main Chat Panel -->
+        <div class="chat-container">
+            <div class="chat-header">
+                <h1>💬 سجل المحادثات المتزامن مع Git</h1>
+                <div class="live-status">
+                    <span class="pulse-dot"></span>
+                    <span>متصل ومزامن تلقائياً</span>
+                </div>
+            </div>
+
+            <div id="messages-wrapper">
+                <!-- يتم تحميل المحادثات ديناميكياً -->
+            </div>
         </div>
     </div>
 
     <script>
         let lastDataHash = "";
 
+        async function fetchGitTimeline() {
+            try {
+                const response = await fetch('./git_timeline.json?t=' + Date.now(), { cache: 'no-store' });
+                if (!response.ok) return;
+                const data = await response.json();
+                renderTimelineSidebar(data);
+            } catch (e) {}
+        }
+
+        function renderTimelineSidebar(data) {
+            const branchesWrapper = document.getElementById('branches-list');
+            branchesWrapper.innerHTML = '';
+            (data.branches || ['main']).forEach(b => {
+                const badge = document.createElement('span');
+                badge.className = 'branch-badge';
+                badge.textContent = '🌿 ' + b;
+                branchesWrapper.appendChild(badge);
+            });
+
+            const timelineWrapper = document.getElementById('git-timeline-nodes');
+            timelineWrapper.innerHTML = '';
+            (data.history || []).forEach(item => {
+                const node = document.createElement('div');
+                const authorClass = item.author.toLowerCase().includes('mostafa') ? 'author-mostafa' : 'author-shihab';
+                node.className = `timeline-node ${authorClass}`;
+                node.innerHTML = `
+                    <span class="node-author">👤 ${item.author} (${item.date})</span>
+                    <span class="node-msg">${item.message}</span>
+                    <span class="node-commit">🔖 ${item.commit.substring(0, 7)}</span>
+                `;
+                timelineWrapper.appendChild(node);
+            });
+        }
+
         async function fetchChatHistory() {
             try {
-                // منع التخزين المؤقت لضمان المزامنة الفورية
                 const response = await fetch('./chat_history.json?t=' + Date.now(), { cache: 'no-store' });
                 if (!response.ok) return;
 
                 const data = await response.json();
                 const dataString = JSON.stringify(data);
 
-                // تحديث الشاشة فقط إذا طرأ تغيير جديد
                 if (dataString !== lastDataHash) {
                     lastDataHash = dataString;
                     renderChatMessages(data);
@@ -229,27 +398,27 @@
                 aiSec.appendChild(aiLabel);
                 aiSec.appendChild(aiContent);
 
+                const actionBar = document.createElement('div');
+                actionBar.className = 'action-bar';
+                actionBar.innerHTML = `
+                    <button class="btn-action">⏪ الرجوع لهذه اللحظة بالكود</button>
+                    <button class="btn-action">🌿 فتح مسار (Branch) جديد</button>
+                `;
+
                 group.appendChild(userSec);
                 group.appendChild(aiSec);
-
-                if (idx < messages.length - 1) {
-                    const divider = document.createElement('div');
-                    divider.className = 'divider';
-                    group.appendChild(divider);
-                }
+                group.appendChild(actionBar);
 
                 wrapper.appendChild(group);
             });
-
-            // تمرير تلقائي لأسفل السجل عند وصول رسالة جديدة
-            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         }
 
-        // تشغيل الجلب فور فتح الصفحة
         fetchChatHistory();
-
-        // فحص وتحديث الهيستوري تلقائياً كل ثانيتين في الوقت الفعلي
-        setInterval(fetchChatHistory, 2000);
+        fetchGitTimeline();
+        setInterval(() => {
+            fetchChatHistory();
+            fetchGitTimeline();
+        }, 2000);
     </script>
 </body>
 </html>

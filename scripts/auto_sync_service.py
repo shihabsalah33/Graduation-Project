@@ -37,38 +37,85 @@ def is_online():
     success, _, _ = run_git_command(["ls-remote", "origin", "-h", "refs/heads/main"])
     return success
 
+import json
+
+def get_git_branches():
+    success, stdout, _ = run_git_command(["branch", "-a"])
+    if not success:
+        return []
+    branches = []
+    for line in stdout.splitlines():
+        name = line.replace("*", "").strip()
+        if "->" not in name:
+            branches.append(name)
+    return list(set(branches))
+
+def get_git_history():
+    # Format: hash|author|date|message
+    fmt = "%H|%an|%ar|%s"
+    success, stdout, _ = run_git_command(["log", "-n", "30", f"--pretty=format:{fmt}"])
+    if not success:
+        return []
+    
+    history = []
+    for line in stdout.splitlines():
+        parts = line.split("|")
+        if len(parts) >= 4:
+            history.append({
+                "commit": parts[0],
+                "author": parts[1],
+                "date": parts[2],
+                "message": parts[3]
+            })
+    return history
+
+def export_git_timeline():
+    timeline_file = os.path.join(PROJECT_DIR, "chats", "git_timeline.json")
+    data = {
+        "branches": get_git_branches(),
+        "history": get_git_history(),
+        "current_head": run_git_command(["rev-parse", "HEAD"])[1]
+    }
+    try:
+        with open(timeline_file, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+    except Exception as e:
+        log(f"Export timeline error: {e}")
+
 def sync_repository():
     # 1. Always Auto-Pull remote changes first if online
     online = is_online()
     if online:
-        # Pull latest changes without overriding unstaged local files
         run_git_command(["pull", "--rebase", "origin", "main"])
 
-    # 2. Check for local changes (chats, json, html, code, etc.)
+    # 2. Export updated Git timeline graph for UI
+    export_git_timeline()
+
+    # 3. Check for local changes
     success, stdout, stderr = run_git_command(["status", "--porcelain"])
     if not success or not stdout:
         return
 
     log("Pending local changes detected. Saving locally...")
 
-    # 3. Stage all local changes (Offline or Online)
+    # 4. Stage all local changes
     success, _, stderr = run_git_command(["add", "-A"])
     if not success:
         log(f"Git add failed: {stderr}")
         return
 
-    # 4. Commit changes locally
+    # 5. Commit changes locally
     commit_msg = f"Auto Sync: Local update [{datetime.now().strftime('%Y-%m-%d %H:%M')}]"
     success, _, stderr = run_git_command(["commit", "-m", commit_msg])
     if not success:
         return
 
     log("Local commit saved successfully.")
+    export_git_timeline()
 
-    # 5. Push to GitHub if online
+    # 6. Push to GitHub if online
     if online:
         log("Internet connection available. Syncing with GitHub...")
-        # Pull rebase once more before pushing to solve non-fast-forward silently
         run_git_command(["pull", "--rebase", "origin", "main"])
         success, stdout, stderr = run_git_command(["push", "origin", "main"])
         if success:
