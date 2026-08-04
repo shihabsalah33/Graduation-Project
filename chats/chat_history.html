@@ -419,20 +419,19 @@
             });
         }
 
-        async function openIdeDiff(hash) {
-            try {
-                // Save diff trigger directly inside project chats
-                const reqData = {
-                    commit_hash: hash,
-                    time: Date.now()
-                };
-                const response = await fetch('./.diff_request.json', {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(reqData)
-                });
-            } catch(e) {}
-            alert('تم إرسال أمر فتح المقارنة! الخدمة تعمل في الخلفية وستقوم بفتح شاشة Diff التفاعلية المباشرة داخل Antigravity IDE خلال ثوانٍ للنقطة (' + hash.substring(0, 7) + ').');
+        function openIdeDiff(hash) {
+            const reqData = {
+                commit_hash: hash,
+                time: Date.now()
+            };
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(reqData));
+            const dlAnchorElem = document.createElement('a');
+            dlAnchorElem.setAttribute("href", dataStr);
+            dlAnchorElem.setAttribute("download", ".diff_request.json");
+            document.body.appendChild(dlAnchorElem);
+            dlAnchorElem.click();
+            dlAnchorElem.remove();
+            alert('تم طلب فتح المقارنة للنقطة (' + hash.substring(0, 7) + ')! قم بنقل/حفظ الملف .diff_request.json داخل مجلد chats لتقوم الخدمة بفتح نافذة Diff فوراً في Antigravity.');
         }
 
         function filterChat(author) {
