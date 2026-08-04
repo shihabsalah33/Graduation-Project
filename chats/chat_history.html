@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سجل المحادثات المشتركة - مشروع التخرج</title>
+    <style>
+        :root {
+            --bg-color: #0b0b0e;
+            --user-bubble-bg: #2a2b2e;
+            --user-text: #ffffff;
+            --ai-text: #e1e1e6;
+            --label-color: #a0a0ab;
+            --ai-label-color: #d1d5db;
+            --border-color: #27272a;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--ai-text);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            direction: rtl;
+        }
+
+        .chat-container {
+            width: 100%;
+            max-width: 850px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .chat-header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 10px;
+        }
+
+        .chat-header h1 {
+            color: #ffffff;
+            font-size: 1.5rem;
+            margin: 0 0 8px 0;
+        }
+
+        .message-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .user-section {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+        }
+
+        .user-label {
+            color: var(--label-color);
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding-right: 4px;
+        }
+
+        .user-bubble {
+            background-color: var(--user-bubble-bg);
+            color: var(--user-text);
+            padding: 16px 22px;
+            border-radius: 18px;
+            max-width: 90%;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .ai-section {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 4px;
+            padding-right: 4px;
+        }
+
+        .ai-label {
+            color: var(--ai-label-color);
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+        .ai-content {
+            color: var(--ai-text);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            white-space: pre-wrap;
+        }
+
+        .divider {
+            height: 1px;
+            background-color: var(--border-color);
+            margin: 12px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1>💬 سجل المحادثات المشتركة</h1>
+        </div>
+
+        <!-- بداية السجل الجديد -->
+        <div class="message-group">
+            <div class="user-section">
+                <div class="user-label">👤 Shihab (مالك المشروع)</div>
+                <div class="user-bubble">الان اريدك ان تكتشف كل مستخدم لحاله و الان اريدك ان تقوم بحفظ الهيستوري كما هو في الصورة و لا اريد تاريخ و لا شيء اريد رسالتي او رسالة زميلي و فوقها توضيح من الذي كتبها و تكون الرسائل كما هي سواء مني او من زميلي او منك بنفس التفصيل اوكي ويكون الدردشة في ملف منسق بمجرد الضغط عليه يشوف الهيستوري كامل و ليس كملف مارك داون ليس منسق هل فهمت . ما اريد لنقم الان بحذف الهيستوري و عمل هذه الاوامر و البدء من جديد و ايضا عندما يقوم المستخدم بعمل استئناف او فتح دردشة جديدة فل تقول له ماهي اخر رسالة في الهيستوري اوكي</div>
+            </div>
+            <div class="ai-section">
+                <div class="ai-label">🤖 Antigravity</div>
+                <div class="ai-content">علم وحُفظ تماماً! تم حذف السجل القديم وتصفير الهيستوري بالكامل للبدء من جديد.
+
+تم اعتماد النظام الجديد فوراً:
+1. التمييز المستقل لكل مستخدم (Shihab أو اسم الزميل مثل Mostafa).
+2. تصميم المحادثة في ملف منسق تفاعلي بحواف منحنية وفقاقيع داكنة شبيهاً تماماً بالصورة المرفقة.
+3. إلغاء التواريخ والأوقات، والاعتماد على اسم صاحب الرسالة فوق الفقاعة مباشرة.
+4. إلغاء سرد "آخر رسالة" عند استئناف الجلسات أو فتح شات جديد.
+5. توفير ملف chat_history.html منسق ومجهز للعرض بضغطة واحدة، بجانب ملف chat_history.md.</div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
