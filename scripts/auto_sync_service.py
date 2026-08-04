@@ -150,7 +150,7 @@ def sync_repository():
 
 def main():
     log("Graduation Project Auto-Sync Service Started.")
-    check_interval = 20  # check every 20 seconds
+    check_interval = 5  # Instant active sync every 5 seconds continuously
 
     while True:
         try:
