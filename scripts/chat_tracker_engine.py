@@ -57,6 +57,16 @@ def clean_user_message(raw_text):
     clean_text = re.sub(r'</USER_REQUEST>', '', clean_text)
     return clean_text.strip()
 
+def clean_ai_message(raw_text):
+    if not raw_text:
+        return ""
+    # Remove markdown bold/italic asterisks, hash headers, and raw file links
+    text = re.sub(r'[\*\#\`\~]', '', raw_text)
+    text = re.sub(r'\(file:\/\/\/.*?\)', '', text)
+    text = re.sub(r'\[(.*?)\]', r'\1', text)
+    text = re.sub(r'\n{3,}', '\n\n', text)
+    return text.strip()
+
 def extract_project_messages():
     if not verify_project_identity():
         return []
@@ -89,7 +99,7 @@ def extract_project_messages():
                                     "id": len(messages) + 1,
                                     "sender": user_name,
                                     "userMessage": current_user_msg,
-                                    "aiMessage": current_ai_msg
+                                    "aiMessage": clean_ai_message(current_ai_msg)
                                 })
                                 current_ai_msg = ""
                             current_user_msg = cleaned
@@ -104,7 +114,7 @@ def extract_project_messages():
                     "id": len(messages) + 1,
                     "sender": user_name,
                     "userMessage": current_user_msg,
-                    "aiMessage": current_ai_msg
+                    "aiMessage": clean_ai_message(current_ai_msg)
                 })
     except Exception:
         pass

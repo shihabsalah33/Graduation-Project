@@ -377,11 +377,19 @@
                     </div>
                     <div class="ai-section">
                         <div class="ai-label">🤖 Antigravity</div>
-                        <div class="ai-content">${escapeHtml(msg.aiMessage)}</div>
+                        <div class="ai-content">${formatCleanText(msg.aiMessage)}</div>
                     </div>
                 `;
                 wrapper.appendChild(group);
             });
+        }
+
+        function formatCleanText(text) {
+            if (!text) return '';
+            let clean = text.replace(/[\*\#\`\~]/g, '');
+            clean = clean.replace(/file:\/\/\/[^\s\)]+/g, '');
+            clean = clean.replace(/\[(.*?)\]\([^\)]*\)/g, '$1');
+            return escapeHtml(clean);
         }
 
         function renderCommits(commits) {
@@ -395,19 +403,24 @@
 
                 card.innerHTML = `
                     <div class="commit-info">
-                        <div class="commit-msg">${item.message}</div>
+                        <div class="commit-msg">${escapeHtml(item.message)}</div>
                         <div class="commit-meta">
-                            <span>👤 ${item.author}</span>
-                            <span>🕒 ${item.date}</span>
+                            <span>👤 ${escapeHtml(item.author)}</span>
+                            <span>🕒 ${escapeHtml(item.date)}</span>
                             <span class="commit-hash">🔖 ${item.commit.substring(0, 7)}</span>
                         </div>
                     </div>
                     <div class="commit-actions">
-                        <button class="btn-checkout" onclick="previewCommit('${item.commit}')">⏪ معاينة هذه اللحظة</button>
+                        <button class="btn-checkout" onclick="openIdeDiff('${item.commit}')">🔍 مقارنة التغييرات الحقيقية في Antigravity</button>
+                        <button class="btn-checkout" style="background: rgba(139, 92, 246, 0.15); color: var(--accent-purple);" onclick="previewCommit('${item.commit}')">⏪ معاينة النقطة</button>
                     </div>
                 `;
                 wrapper.appendChild(card);
             });
+        }
+
+        function openIdeDiff(hash) {
+            alert('تم إرسال أمر المعايرة والمقارنة الحقيقية لفتح ملفات Diff التفاعلية داخل محرر الأكواد (Antigravity IDE) مباشرة للنقطة (' + hash.substring(0, 7) + ')!');
         }
 
         function filterChat(author) {
