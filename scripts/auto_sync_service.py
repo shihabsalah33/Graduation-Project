@@ -82,8 +82,21 @@ def export_git_timeline():
     except Exception as e:
         log(f"Export timeline error: {e}")
 
+from chat_tracker_engine import sync_chat_tracker, verify_project_identity
+
 def sync_repository():
-    # 1. Always Auto-Pull remote changes first if online
+    # Verify project identity first before doing anything
+    if not verify_project_identity():
+        log("Project identity verification failed. Skipping sync.")
+        return
+
+    # 1. Run deterministic chat tracker engine to auto-log messages
+    try:
+        sync_chat_tracker()
+    except Exception as e:
+        log(f"Chat tracker engine error: {e}")
+
+    # 2. Always Auto-Pull remote changes first if online
     online = is_online()
     if online:
         run_git_command(["pull", "--rebase", "origin", "main"])
