@@ -283,9 +283,13 @@
                 <button class="tab-btn active" onclick="switchTab('chat')">💬 الشات والمناقشات المشتركة</button>
                 <button class="tab-btn" onclick="switchTab('commits')">📜 سجل الـ Commits وتاريخ الكود</button>
             </div>
-            <div class="live-status">
-                <span class="pulse-dot"></span>
-                <span>مزامن تلقائياً</span>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <button class="filter-btn" style="background: rgba(16, 185, 129, 0.2); color: #10b981; font-weight: 700; border-color: rgba(16, 185, 129, 0.4); padding: 8px 16px;" onclick="triggerManualPush()">📤 رفع التحديثات الحالية إلى GitHub</button>
+                <button class="filter-btn" style="background: rgba(59, 130, 246, 0.2); color: #3b82f6; font-weight: 700; border-color: rgba(59, 130, 246, 0.4); padding: 8px 16px;" onclick="triggerManualPull()">📥 جلب التغيرات من GitHub</button>
+                <div class="status-badge">
+                    <div class="pulse-dot"></div>
+                    <span>التزامن الصامت الخفي 100% نشط</span>
+                </div>
             </div>
         </div>
 
@@ -545,6 +549,24 @@
         function confirmRollback() {
             alert('تم تأكيد اعتماد النقطة وإنشاء مسار جديد ومزامنته للجميع بنجاح!');
             document.getElementById('preview-banner').style.display = 'none';
+        }
+
+        function triggerManualPush() {
+            const blob = new Blob(["PUSH"], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = '.trigger_push';
+            link.click();
+            alert('🚀 جاري رفع التحديثات الحالية من جهازك إلى GitHub بضغطة زر...');
+        }
+
+        function triggerManualPull() {
+            const blob = new Blob(["PULL"], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = '.trigger_pull';
+            link.click();
+            alert('📥 جاري جلب التغيرات وتحديثات الزملاء الجديدة من GitHub...');
         }
 
         function escapeHtml(text) {
