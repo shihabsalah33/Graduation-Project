@@ -551,18 +551,56 @@
             document.getElementById('preview-banner').style.display = 'none';
         }
 
+        let isSyncing = false;
+
         async function triggerManualPush() {
+            if (isSyncing) {
+                alert('⏳ هناك عملية مزامنة جارية بالفعل، الرجاء الانتظار...');
+                return;
+            }
+            isSyncing = true;
+            const pushBadge = document.getElementById('push-badge-status');
+            pushBadge.textContent = '🚀 جاري الرفع المباشر إلى GitHub...';
+
             try {
-                await fetch('./git_timeline.json?action=push', { cache: 'no-store' });
-            } catch(e) {}
-            alert('🚀 تم إرسال أمر الرفع! الخدمة تعمل في خلفية الويندوز وتقوم برفع كود وتعديلات المشروع لـ GitHub بنجاح.');
+                const res = await fetch('http://127.0.0.1:5050/push?t=' + Date.now());
+                const data = await res.json();
+                if (data.success) {
+                    pushBadge.textContent = `📤 آخر رفع (${data.sync_status.last_push_time}): ✅ تم الرفع بنجاح`;
+                } else {
+                    pushBadge.textContent = `❌ فشل الرفع: ${data.message}`;
+                }
+            } catch(e) {
+                pushBadge.textContent = '⚠️ خادم المزامنة غير متاح حالياً';
+            } finally {
+                isSyncing = false;
+                loadTimelineData();
+            }
         }
 
         async function triggerManualPull() {
+            if (isSyncing) {
+                alert('⏳ هناك عملية مزامنة جارية بالفعل، الرجاء الانتظار...');
+                return;
+            }
+            isSyncing = true;
+            const pullBadge = document.getElementById('pull-badge-status');
+            pullBadge.textContent = '📥 جاري جلب التغيرات من GitHub...';
+
             try {
-                await fetch('./git_timeline.json?action=pull', { cache: 'no-store' });
-            } catch(e) {}
-            alert('📥 تم إرسال أمر الجلب! الخدمة تقوم بسحب التحديثات وتحديث الشاتات والكود من GitHub بنجاح.');
+                const res = await fetch('http://127.0.0.1:5050/pull?t=' + Date.now());
+                const data = await res.json();
+                if (data.success) {
+                    pullBadge.textContent = `📥 آخر جلب (${data.sync_status.last_pull_time}): ✅ تم الجلب بنجاح`;
+                } else {
+                    pullBadge.textContent = `❌ فشل الجلب: ${data.message}`;
+                }
+            } catch(e) {
+                pullBadge.textContent = '⚠️ خادم المزامنة غير متاح حالياً';
+            } finally {
+                isSyncing = false;
+                loadTimelineData();
+            }
         }
 
         function escapeHtml(text) {
